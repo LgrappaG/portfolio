@@ -11,7 +11,10 @@
     "type-check": "tsc --noEmit",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage"
+    "test:coverage": "jest --coverage",
+    "export": "next build && echo 'Static export ready in ./out'",
+    "deploy-gh": "next build && gh-pages -d out -t",
+    "deploy-gh-windows": "next build && node scripts/deploy-gh-pages.js"
   },
   "dependencies": {
     "react": "^18.2.0",
@@ -46,7 +49,8 @@
     "eslint-config-next": "^14.0.0",
     "prettier": "^3.1.1",
     "@tailwindcss/forms": "^0.5.7",
-    "@tailwindcss/typography": "^0.5.10"
+    "@tailwindcss/typography": "^0.5.10",
+    "gh-pages": "^6.1.1"
   },
   "engines": {
     "node": ">=18.0.0",
