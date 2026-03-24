@@ -1,0 +1,250 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// USER MODEL (Admin users for future use)
+// ============================================
+
+model User {
+  id    Int     @id @default(autoincrement())
+  email String  @unique
+  username String?
+  passwordHash String?
+  role String @default("user") // admin, user
+
+  // Relations
+  articles Article[]
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ============================================
+// PROJECT MODELS (GitHub repositories)
+// ============================================
+
+model Project {
+  id          Int     @id @default(autoincrement())
+
+  // GitHub data
+  githubId    BigInt  @unique
+  slug        String  @unique
+  name        String
+  description String?
+  url         String
+  homepage    String?
+  language    String?
+
+  // GitHub Statistics
+  starsCount      Int @default(0)
+  forksCount      Int @default(0)
+  watchersCount   Int @default(0)
+  openIssues      Int @default(0)
+  contributorsCount Int @default(0)
+
+  // Classification
+  category    String?              // 'software-dev', 'game-dev', 'tool', 'library'
+  isGameDev   Boolean @default(false)
+  featured    Boolean @default(false)
+  status      String?              // 'active', 'archived', 'in-development'
+
+  // Metadata
+  tags        String[]  @default([])     // Array of tags
+  technologies String[] @default([])     // ['React', 'Node.js', 'Unity', etc.]
+
+  // Relations
+  details ProjectDetail?
+
+  // Timestamps
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  githubUpdatedAt DateTime?
+  syncedAt        DateTime @default(now())
+
+  // Indexes for performance
+  @@index([featured])
+  @@index([isGameDev])
+  @@index([category])
+  @@index([slug])
+}
+
+model ProjectDetail {
+  id          Int     @id @default(autoincrement())
+  projectId   Int     @unique
+  project     Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  // Content
+  summary           String?
+  longDescription   String?
+  features          String[]  @default([])
+
+  // Media
+  thumbnailUrl      String?
+  screenshots       String[]  @default([])
+  demoUrl           String?
+  videoUrl          String?
+
+  // Insights
+  learningPoints    String[]  @default([])
+  challenges        String[]  @default([])
+  solutions         String[]  @default([])
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([projectId])
+}
+
+// ============================================
+// ARTICLE MODEL (Blog posts)
+// ============================================
+
+model Article {
+  id        Int     @id @default(autoincrement())
+
+  // Core content
+  slug      String  @unique
+  title     String
+  excerpt   String?
+  content   String  // Markdown content
+
+  // Metadata
+  authorId  Int?
+  author    User?   @relation(fields: [authorId], references: [id], onDelete: SetNull)
+  category  String?  // 'development', 'game-dev', 'tutorial', etc.
+  tags      String[] @default([])
+
+  // Status
+  featured  Boolean @default(false)
+  published Boolean @default(false)
+
+  // Images
+  featuredImage String?
+
+  // Statistics
+  viewCount Int @default(0)
+
+  // Timestamps
+  publishedAt DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([published])
+  @@index([category])
+  @@index([slug])
+}
+
+// ============================================
+// SKILL MODEL (Technologies & Skills)
+// ============================================
+
+model Skill {
+  id            Int     @id @default(autoincrement())
+  name          String  @unique
+  category      String  // 'frontend', 'backend', 'gamedev', 'devops', 'database'
+
+  // Proficiency
+  proficiency   Int @default(5)   // 1-5 scale (1=Beginner, 5=Expert)
+  yearsExperience Int @default(0)
+
+  // Display
+  iconUrl       String?
+  featured      Boolean @default(false)
+  displayOrder  Int @default(0)
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([category])
+  @@index([featured])
+  @@index([displayOrder])
+}
+
+// ============================================
+// EXPERIENCE MODEL (Career Timeline)
+// ============================================
+
+model Experience {
+  id          Int     @id @default(autoincrement())
+
+  // Job details
+  title       String
+  company     String?
+  position    String?
+  description String?
+
+  // Duration
+  startDate       Date
+  endDate         Date?
+  currentPosition Boolean @default(false)
+
+  // Technologies used
+  technologies String[] @default([])
+  displayOrder Int?
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([currentPosition])
+  @@index([displayOrder])
+}
+
+// ============================================
+// CACHING & ANALYTICS
+// ============================================
+
+model GitHubActivityCache {
+  id          Int     @id @default(autoincrement())
+
+  // Cache key
+  activityType String  // 'user_info', 'repos_list', 'repo_stats'
+  username    String
+
+  // Cache data
+  data        Json
+
+  // TTL
+  cachedAt  DateTime @default(now())
+  expiresAt DateTime?
+
+  @@unique([activityType, username])
+  @@index([expiresAt])
+}
+
+model PageAnalytics {
+  id            Int     @id @default(autoincrement())
+
+  // Page info
+  pagePath      String
+  visitorCount  Int @default(0)
+  uniqueVisitors Int @default(0)
+  pageViews     Int @default(0)
+
+  // Device info
+  deviceType    String?
+  browser       String?
+
+  // Timestamp
+  date          DateTime @default(now())
+  lastVisited   DateTime @default(now())
+
+  // Custom data
+  data          Json?
+
+  @@unique([pagePath, date])
+  @@index([pagePath])
+  @@index([date])
+}
