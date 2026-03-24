@@ -169,11 +169,11 @@ export default function Home() {
             <motion.div
               key={i}
               variants={itemVariants}
-              className="card-base p-8 text-center hover:scale-105 transition-transform"
+              className="card-base p-8 text-center hover:scale-105 transition-transform border-2 border-transparent hover:border-blue-400/50 dark:hover:border-blue-500/50"
             >
               <div className="text-4xl mb-3">{stat.icon}</div>
               <div className="text-4xl md:text-5xl font-bold text-gradient mb-2">{stat.value}</div>
-              <p className="text-slate-600 dark:text-slate-400 font-medium">{stat.label}</p>
+              <p className="text-slate-700 dark:text-slate-300 font-medium">{stat.label}</p>
             </motion.div>
           ))}
         </motion.section>
@@ -214,15 +214,16 @@ export default function Home() {
                   rel="noopener noreferrer"
                   variants={itemVariants}
                   whileHover={{ y: -10 }}
-                  className="card-base p-6 cursor-pointer group overflow-hidden hover:shadow-xl transition-shadow"
+                  className="card-base p-6 cursor-pointer group overflow-hidden hover:shadow-xl hover:scale-105 transition-all duration-300 border-2 border-transparent hover:border-blue-400/50 dark:hover:border-blue-500/50"
                 >
-                  <div className="h-40 bg-gradient-to-br from-blue-500 to-purple-500 rounded-lg mb-4 flex items-center justify-center group-hover:shadow-lg transition-shadow">
-                    <span className="text-white font-bold text-center px-4">{project.name}</span>
+                  <div className="h-40 bg-gradient-to-br from-blue-500 to-purple-500 rounded-lg mb-4 flex items-center justify-center group-hover:shadow-lg transition-shadow relative">
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all rounded-lg"></div>
+                    <span className="text-white font-bold text-center px-4 relative z-10">{project.name}</span>
                   </div>
-                  <h3 className="text-lg font-bold mb-2 text-blue-600 dark:text-blue-400">
+                  <h3 className="text-lg font-bold mb-2 text-blue-700 dark:text-blue-300 group-hover:text-blue-600 dark:group-hover:text-blue-200 transition-colors">
                     {project.name}
                   </h3>
-                  <p className="text-slate-600 dark:text-slate-400 mb-4 text-sm line-clamp-2">
+                  <p className="text-slate-700 dark:text-slate-300 mb-4 text-sm line-clamp-2">
                     {project.description || 'No description'}
                   </p>
                   <div className="flex gap-2 flex-wrap mb-4">

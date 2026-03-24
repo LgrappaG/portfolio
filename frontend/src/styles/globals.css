@@ -40,7 +40,7 @@
   }
 
   .card-base {
-    @apply bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg shadow-sm hover:shadow-md transition-shadow;
+    @apply bg-white dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/80 rounded-lg shadow-sm dark:shadow-lg hover:shadow-md dark:hover:shadow-xl transition-all backdrop-blur-sm dark:backdrop-blur;
   }
 
   .btn-base {

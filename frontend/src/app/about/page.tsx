@@ -11,7 +11,7 @@ export default function About() {
 
       {/* Bio */}
       <section className="mb-16 md:mb-24">
-        <div className="card-base p-8">
+        <div className="card-base p-8 border-2 border-transparent hover:border-blue-400/50 dark:hover:border-blue-500/50 transition-colors">
           <h2 className="text-2xl md:text-3xl font-bold mb-4">Who I Am</h2>
           <div className="space-y-4 text-slate-700 dark:text-slate-300">
             <p>
@@ -35,7 +35,7 @@ export default function About() {
         <h2 className="text-3xl font-bold mb-8">Skills & Technologies</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {/* Game Development */}
-          <div className="card-base p-6">
+          <div className="card-base p-6 border-2 border-transparent hover:border-blue-400/50 dark:hover:border-blue-500/50 transition-colors">
             <h3 className="text-xl font-bold mb-4">🎮 Game Development</h3>
             <ul className="space-y-2 text-slate-700 dark:text-slate-300">
               <li>• <strong>Unity</strong> (Primary)</li>
@@ -48,7 +48,7 @@ export default function About() {
           </div>
 
           {/* Programming */}
-          <div className="card-base p-6">
+          <div className="card-base p-6 border-2 border-transparent hover:border-blue-400/50 dark:hover:border-blue-500/50 transition-colors">
             <h3 className="text-xl font-bold mb-4">💻 Programming</h3>
             <ul className="space-y-2 text-slate-700 dark:text-slate-300">
               <li>• C# (Expert)</li>
@@ -61,7 +61,7 @@ export default function About() {
           </div>
 
           {/* Tools & Other */}
-          <div className="card-base p-6">
+          <div className="card-base p-6 border-2 border-transparent hover:border-blue-400/50 dark:hover:border-blue-500/50 transition-colors">
             <h3 className="text-xl font-bold mb-4">🛠️ Tools & Other</h3>
             <ul className="space-y-2 text-slate-700 dark:text-slate-300">
               <li>• React & Next.js</li>
@@ -105,7 +105,7 @@ export default function About() {
               desc: "Limited frontend experience with React and TypeScript"
             }
           ].map((exp, i) => (
-            <div key={i} className="card-base p-6 border-l-4 border-blue-600">
+            <div key={i} className="card-base p-6 border-l-4 border-blue-600 hover:border-blue-400/50 dark:hover:border-blue-500/50 transition-colors">
               <div className="flex justify-between items-start mb-2">
                 <h3 className="text-xl font-bold">{exp.role}</h3>
                 <span className="text-sm text-slate-500">{exp.period}</span>
@@ -126,9 +126,9 @@ export default function About() {
             { label: "GitHub Stars", value: "250+" },
             { label: "Years Experience", value: "5+" }
           ].map((stat, i) => (
-            <div key={i} className="card-base p-6 text-center">
+            <div key={i} className="card-base p-6 text-center border-2 border-transparent hover:border-blue-400/50 dark:hover:border-blue-500/50 transition-colors">
               <div className="text-3xl md:text-4xl font-bold text-gradient mb-2">{stat.value}</div>
-              <p className="text-slate-600 dark:text-slate-400">{stat.label}</p>
+              <p className="text-slate-700 dark:text-slate-300">{stat.label}</p>
             </div>
           ))}
         </div>

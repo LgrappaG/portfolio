@@ -33,14 +33,14 @@ export default function Contact() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16 md:mb-24">
         {/* Contact Info */}
         <div className="space-y-6">
-          <div className="card-base p-6">
+          <div className="card-base p-6 border-2 border-transparent hover:border-blue-400/50 dark:hover:border-blue-500/50 transition-colors">
             <h3 className="text-lg font-bold mb-2">Email</h3>
             <a href="mailto:contact@example.com" className="text-blue-600 dark:text-blue-400 hover:underline">
               contact@example.com
             </a>
           </div>
 
-          <div className="card-base p-6">
+          <div className="card-base p-6 border-2 border-transparent hover:border-blue-400/50 dark:hover:border-blue-500/50 transition-colors">
             <h3 className="text-lg font-bold mb-2">Social</h3>
             <div className="space-y-2">
               <a href="https://github.com" target="_blank" rel="noopener noreferrer"
@@ -58,7 +58,7 @@ export default function Contact() {
             </div>
           </div>
 
-          <div className="card-base p-6">
+          <div className="card-base p-6 border-2 border-transparent hover:border-blue-400/50 dark:hover:border-blue-500/50 transition-colors">
             <h3 className="text-lg font-bold mb-2">Location</h3>
             <p className="text-slate-700 dark:text-slate-300">Remote / Available Worldwide</p>
           </div>
@@ -66,7 +66,7 @@ export default function Contact() {
 
         {/* Contact Form */}
         <div className="lg:col-span-2">
-          <div className="card-base p-8">
+          <div className="card-base p-8 border-2 border-transparent hover:border-blue-400/50 dark:hover:border-blue-500/50 transition-colors">
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Name */}
               <div>
@@ -153,7 +153,7 @@ export default function Contact() {
             { q: "What's your hourly rate?", a: "Rates vary based on project scope. Let's discuss your needs." },
             { q: "Can you sign NDAs?", a: "Absolutely. I'm happy to sign NDAs for confidential projects." }
           ].map((faq, i) => (
-            <div key={i} className="card-base p-6">
+            <div key={i} className="card-base p-6 border-2 border-transparent hover:border-blue-400/50 dark:hover:border-blue-500/50 transition-colors">
               <h3 className="font-bold mb-2 text-blue-600 dark:text-blue-400">{faq.q}</h3>
               <p className="text-slate-700 dark:text-slate-300">{faq.a}</p>
             </div>
