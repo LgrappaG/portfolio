@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Inter, Fira_Code } from 'next/font/google';
+import { Header } from '@/components';
 import '@/styles/globals.css';
 
 const inter = Inter({
@@ -98,17 +99,8 @@ export default function RootLayout({ children }: RootLayoutProps) {
       </head>
       <body className="font-sans antialiased">
         <div className="flex flex-col min-h-screen">
-          {/* Header will go here */}
-          <header className="sticky top-0 z-50 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 backdrop-blur-sm">
-            <nav className="container-max container-px py-4">
-              <div className=" text-center">
-                <h1 className="text-2xl font-bold text-gradient">LgrappaG</h1>
-                <p className="text-sm text-slate-600 dark:text-slate-400">
-                  Full Stack Developer & Game Dev
-                </p>
-              </div>
-            </nav>
-          </header>
+          {/* Header */}
+          <Header />
 
           {/* Main content */}
           <main className="flex-1">
