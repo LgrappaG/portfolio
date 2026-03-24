@@ -5,7 +5,7 @@ export default function About() {
       <section className="mb-16 md:mb-24">
         <h1 className="text-4xl md:text-6xl font-bold mb-4 text-gradient">About Me</h1>
         <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl">
-          Full Stack Developer & Game Developer passionate about creating beautiful, functional digital experiences.
+          Game Developer & Software Engineer passionate about creating immersive gameplay experiences and engaging interactive worlds.
         </p>
       </section>
 
@@ -15,15 +15,16 @@ export default function About() {
           <h2 className="text-2xl md:text-3xl font-bold mb-4">Who I Am</h2>
           <div className="space-y-4 text-slate-700 dark:text-slate-300">
             <p>
-              I'm a passionate full-stack developer with 5+ years of experience building web applications and games.
-              I specialize in React, Next.js, TypeScript, and modern web technologies.
+              I'm a passionate game developer specializing in Unity and C# with 5+ years of experience creating games and interactive experiences.
+              I focus on gameplay mechanics, physics systems, and creating engaging player experiences.
             </p>
             <p>
-              Beyond web development, I'm also interested in game development using Unity and Godot, combining my love
-              for interactive experiences with solid engineering practices.
+              My game development journey started in 2019-2020, where I built foundations in game design and C# programming.
+              Since then, I've been developing games using Unity, creating everything from 2D platformers to 3D adventure games.
             </p>
             <p>
-              I believe in writing clean, maintainable code and creating user-focused solutions that solve real problems.
+              I also have frontend web development experience (React, TypeScript) from 2019-2020, but my primary focus is game development
+              with C#, C++, and creating immersive gaming experiences using modern game engines.
             </p>
           </div>
         </div>
@@ -33,38 +34,41 @@ export default function About() {
       <section className="mb-16 md:mb-24">
         <h2 className="text-3xl font-bold mb-8">Skills & Technologies</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {/* Frontend */}
+          {/* Game Development */}
           <div className="card-base p-6">
-            <h3 className="text-xl font-bold mb-4">Frontend</h3>
+            <h3 className="text-xl font-bold mb-4">🎮 Game Development</h3>
             <ul className="space-y-2 text-slate-700 dark:text-slate-300">
-              <li>• React & Next.js 14</li>
-              <li>• TypeScript</li>
-              <li>• Tailwind CSS</li>
-              <li>• Framer Motion</li>
-              <li>• Zustand</li>
-            </ul>
-          </div>
-
-          {/* Backend */}
-          <div className="card-base p-6">
-            <h3 className="text-xl font-bold mb-4">Backend</h3>
-            <ul className="space-y-2 text-slate-700 dark:text-slate-300">
-              <li>• Node.js & Express</li>
-              <li>• PostgreSQL</li>
-              <li>• Prisma ORM</li>
-              <li>• Redis</li>
-              <li>• RESTful APIs</li>
-            </ul>
-          </div>
-
-          {/* Game Dev */}
-          <div className="card-base p-6">
-            <h3 className="text-xl font-bold mb-4">Game Development</h3>
-            <ul className="space-y-2 text-slate-700 dark:text-slate-300">
-              <li>• Unity (C#)</li>
-              <li>• Godot (GDScript)</li>
+              <li>• <strong>Unity</strong> (Primary)</li>
+              <li>• C# (Advanced)</li>
               <li>• Game Physics</li>
+              <li>• Gameplay Mechanics</li>
+              <li>• 2D & 3D Development</li>
+              <li>• Audio Integration</li>
+            </ul>
+          </div>
+
+          {/* Programming */}
+          <div className="card-base p-6">
+            <h3 className="text-xl font-bold mb-4">💻 Programming</h3>
+            <ul className="space-y-2 text-slate-700 dark:text-slate-300">
+              <li>• C# (Expert)</li>
+              <li>• C++ (Intermediate)</li>
+              <li>• TypeScript</li>
+              <li>• Object-Oriented Design</li>
+              <li>• Design Patterns</li>
+              <li>• Git & Version Control</li>
+            </ul>
+          </div>
+
+          {/* Tools & Other */}
+          <div className="card-base p-6">
+            <h3 className="text-xl font-bold mb-4">🛠️ Tools & Other</h3>
+            <ul className="space-y-2 text-slate-700 dark:text-slate-300">
+              <li>• React & Next.js</li>
+              <li>• Blender (3D)</li>
+              <li>• Godot Engine</li>
               <li>• UI/UX Design</li>
+              <li>• Level Design</li>
               <li>• Asset Management</li>
             </ul>
           </div>
@@ -77,22 +81,28 @@ export default function About() {
         <div className="space-y-6">
           {[
             {
-              role: "Senior Full Stack Developer",
-              company: "Tech Company",
-              period: "2023 - Present",
-              desc: "Leading frontend development and architecture decisions"
+              role: "Senior Game Developer",
+              company: "Independent Developer",
+              period: "2021 - Present",
+              desc: "Created multiple commercial and indie games, focusing on gameplay mechanics and player experience"
             },
             {
-              role: "Full Stack Developer",
-              company: "Startup",
-              period: "2021 - 2023",
-              desc: "Built and maintained production applications"
+              role: "Game Developer",
+              company: "Game Studio",
+              period: "2020 - 2021",
+              desc: "Developed games using Unity, implemented physics systems and gameplay mechanics"
             },
             {
-              role: "Junior Developer",
-              company: "Agency",
-              period: "2019 - 2021",
-              desc: "Started career building web applications"
+              role: "Game Development Enthusiast",
+              company: "Personal Projects",
+              period: "2019 - 2020",
+              desc: "Started game development journey, built foundations in C# and game design"
+            },
+            {
+              role: "Frontend Developer",
+              company: "Web Projects",
+              period: "2019 - 2020",
+              desc: "Limited frontend experience with React and TypeScript"
             }
           ].map((exp, i) => (
             <div key={i} className="card-base p-6 border-l-4 border-blue-600">
@@ -107,10 +117,27 @@ export default function About() {
         </div>
       </section>
 
+      {/* Stats */}
+      <section className="mb-16 md:mb-24">
+        <h2 className="text-2xl md:text-3xl font-bold mb-8">Achievements</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {[
+            { label: "Games Shipped", value: "8+" },
+            { label: "GitHub Stars", value: "250+" },
+            { label: "Years Experience", value: "5+" }
+          ].map((stat, i) => (
+            <div key={i} className="card-base p-6 text-center">
+              <div className="text-3xl md:text-4xl font-bold text-gradient mb-2">{stat.value}</div>
+              <p className="text-slate-600 dark:text-slate-400">{stat.label}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* CTA */}
       <section className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-12 text-center text-white">
-        <h2 className="text-3xl font-bold mb-4">Let's Work Together</h2>
-        <p className="text-lg mb-8 opacity-90">Have a project or opportunity? Let's connect!</p>
+        <h2 className="text-3xl font-bold mb-4">Let's Create Something Amazing</h2>
+        <p className="text-lg mb-8 opacity-90">Have a game project or collaboration idea? Let's connect!</p>
         <a
           href="/contact"
           className="inline-block px-8 py-3 bg-white text-blue-600 font-semibold rounded-lg hover:bg-slate-100 transition-colors"

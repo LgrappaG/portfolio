@@ -2,23 +2,49 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Github } from 'lucide-react';
+import { Github, Star, Eye } from 'lucide-react';
+
+interface GitHubRepo {
+  id: number;
+  name: string;
+  description: string;
+  stargazers_count: number;
+  watchers_count: number;
+  language: string;
+  html_url: string;
+  topics: string[];
+}
 
 export default function Home() {
   const [stats, setStats] = useState({ repos: 0, stars: 0, followers: 0 });
+  const [projects, setProjects] = useState<GitHubRepo[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchGitHubStats = async () => {
+    const fetchData = async () => {
       try {
+        // Fetch user stats
         const userRes = await fetch('https://api.github.com/users/LgrappaG');
         const userData = await userRes.json();
 
-        const reposRes = await fetch('https://api.github.com/users/LgrappaG/repos?per_page=100');
+        // Fetch repositories
+        const reposRes = await fetch('https://api.github.com/users/LgrappaG/repos?per_page=100&sort=stars');
         const reposData = await reposRes.json();
 
+        // Filter game dev related projects (C#, Unity, Godot keywords)
+        const gameProjects = reposData
+          .filter((repo: GitHubRepo) => {
+            const isGameDev =
+              repo.language === 'C#' ||
+              repo.language === 'C++' ||
+              (repo.description && (repo.description.toLowerCase().includes('game') || repo.description.toLowerCase().includes('unity'))) ||
+              repo.topics?.some((t: string) => ['game', 'unity', 'gamedev', 'game-development', 'c-sharp'].includes(t.toLowerCase()));
+            return isGameDev;
+          })
+          .slice(0, 6);
+
         let totalStars = 0;
-        reposData.forEach((repo: any) => {
+        reposData.forEach((repo: GitHubRepo) => {
           totalStars += repo.stargazers_count || 0;
         });
 
@@ -27,14 +53,16 @@ export default function Home() {
           stars: totalStars,
           followers: userData.followers || 0
         });
+
+        setProjects(gameProjects);
       } catch (error) {
-        console.error('Failed to fetch GitHub stats:', error);
+        console.error('Failed to fetch GitHub data:', error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchGitHubStats();
+    fetchData();
   }, []);
 
   const containerVariants = {
@@ -83,15 +111,15 @@ export default function Home() {
 
             {/* Main heading */}
             <h1 className="text-5xl md:text-7xl font-black mb-6 text-gradient leading-tight">
-              Full Stack Developer
+              Game Developer
               <br />
-              & Game Dev
+              & Software Engineer
             </h1>
 
             {/* Subheading */}
             <p className="text-lg md:text-xl text-slate-300 mb-8 leading-relaxed max-w-2xl mx-auto">
-              Building beautiful digital experiences with modern web technologies and creating engaging games.
-              Check out my projects below.
+              Creating immersive gaming experiences with C# and Unity. Specialized in gameplay mechanics, physics systems,
+              and interactive world building.
             </p>
 
             {/* CTA Buttons */}
@@ -102,7 +130,7 @@ export default function Home() {
               className="flex gap-4 justify-center flex-wrap"
             >
               <motion.a
-                href="#projects"
+                href="/projects"
                 variants={itemVariants}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -111,13 +139,13 @@ export default function Home() {
                 View Projects
               </motion.a>
               <motion.a
-                href="/about"
+                href="/contact"
                 variants={itemVariants}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className="px-8 py-4 border-2 border-slate-400 text-slate-300 rounded-lg hover:bg-slate-400/10 hover:border-slate-300 transition-all font-semibold"
               >
-                About Me
+                Contact
               </motion.a>
             </motion.div>
           </motion.div>
@@ -134,9 +162,9 @@ export default function Home() {
           className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16 md:mb-24"
         >
           {[
-            { label: 'Repositories', value: loading ? '...' : stats.repos, icon: '📦' },
+            { label: 'Game Projects', value: loading ? '...' : stats.repos, icon: '🎮' },
             { label: 'GitHub Stars', value: loading ? '...' : stats.stars, icon: '⭐' },
-            { label: 'Followers', value: loading ? '...' : stats.followers, icon: '👥' },
+            { label: 'Community', value: loading ? '...' : stats.followers, icon: '👥' },
           ].map((stat, i) => (
             <motion.div
               key={i}
@@ -160,9 +188,9 @@ export default function Home() {
           className="mb-16 md:mb-24"
         >
           <div className="mb-12">
-            <h2 className="text-4xl md:text-5xl font-bold mb-4">🚀 Featured Projects</h2>
+            <h2 className="text-4xl md:text-5xl font-bold mb-4">🎮 My Games & Projects</h2>
             <p className="text-lg text-slate-600 dark:text-slate-400">
-              A selection of my best work in web development and game creation
+              A collection of game development projects featuring C#, Unity, and gameplay mechanics
             </p>
           </div>
 
@@ -173,55 +201,62 @@ export default function Home() {
             viewport={{ once: true }}
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
           >
-            {[
-              {
-                name: 'E-Commerce Platform',
-                desc: 'Full-stack e-commerce solution with payment integration',
-                tech: ['React', 'Node.js', 'PostgreSQL'],
-                color: 'from-blue-500 to-cyan-500',
-              },
-              {
-                name: 'CMS Dashboard',
-                desc: 'Modern content management system with real-time updates',
-                tech: ['Next.js', 'TypeScript', 'Tailwind'],
-                color: 'from-purple-500 to-pink-500',
-              },
-              {
-                name: '2D Platformer Game',
-                desc: 'Indie platformer game with multiple levels and mechanics',
-                tech: ['Unity', 'C#'],
-                color: 'from-green-500 to-emerald-500',
-              },
-            ].map((project, i) => (
-              <motion.div
-                key={i}
-                variants={itemVariants}
-                whileHover={{ y: -10 }}
-                className="card-base p-6 cursor-pointer group overflow-hidden"
-              >
-                <div className={`h-48 bg-gradient-to-br ${project.color} rounded-lg mb-4 flex items-center justify-center group-hover:shadow-xl transition-shadow`}>
-                  <span className="text-white font-bold text-center px-4 text-lg">{project.name}</span>
-                </div>
-                <h3 className="text-xl font-bold mb-2">{project.name}</h3>
-                <p className="text-slate-600 dark:text-slate-400 mb-4 text-sm">{project.desc}</p>
-                <div className="flex gap-2 flex-wrap mb-4">
-                  {project.tech.map((tech, t) => (
-                    <span
-                      key={t}
-                      className="px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 rounded text-xs font-medium"
-                    >
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-                <a
-                  href="/projects"
-                  className="text-blue-600 dark:text-blue-400 font-semibold hover:underline text-sm"
+            {loading && !projects.length ? (
+              <div className="col-span-full text-center p-8">
+                <p className="text-slate-500">Loading projects...</p>
+              </div>
+            ) : projects.length > 0 ? (
+              projects.map((project) => (
+                <motion.a
+                  key={project.id}
+                  href={project.html_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  variants={itemVariants}
+                  whileHover={{ y: -10 }}
+                  className="card-base p-6 cursor-pointer group overflow-hidden hover:shadow-xl transition-shadow"
                 >
-                  View All Projects →
-                </a>
-              </motion.div>
-            ))}
+                  <div className="h-40 bg-gradient-to-br from-blue-500 to-purple-500 rounded-lg mb-4 flex items-center justify-center group-hover:shadow-lg transition-shadow">
+                    <span className="text-white font-bold text-center px-4">{project.name}</span>
+                  </div>
+                  <h3 className="text-lg font-bold mb-2 text-blue-600 dark:text-blue-400">
+                    {project.name}
+                  </h3>
+                  <p className="text-slate-600 dark:text-slate-400 mb-4 text-sm line-clamp-2">
+                    {project.description || 'No description'}
+                  </p>
+                  <div className="flex gap-2 flex-wrap mb-4">
+                    {project.language && (
+                      <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 rounded text-xs font-medium">
+                        {project.language}
+                      </span>
+                    )}
+                    {project.topics?.slice(0, 2).map((topic) => (
+                      <span
+                        key={topic}
+                        className="px-2 py-1 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded text-xs font-medium"
+                      >
+                        {topic}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="flex justify-between text-sm text-slate-600 dark:text-slate-400">
+                    <span className="flex items-center gap-1">
+                      <Star size={14} className="text-yellow-500" />
+                      {project.stargazers_count}
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <Eye size={14} />
+                      {project.watchers_count}
+                    </span>
+                  </div>
+                </motion.a>
+              ))
+            ) : (
+              <div className="col-span-full text-center p-8">
+                <p className="text-slate-500">No game dev projects found</p>
+              </div>
+            )}
           </motion.div>
         </motion.section>
 
@@ -233,9 +268,9 @@ export default function Home() {
           transition={{ duration: 0.6 }}
           className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-3xl p-12 md:p-16 text-center text-white"
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Let's Build Something Amazing</h2>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">Ready for Your Next Game?</h2>
           <p className="text-lg mb-8 opacity-90 max-w-2xl mx-auto">
-            Have a project in mind? I'm always interested in hearing about new opportunities and collaborations.
+            Whether it's a game project, technical collaboration, or just want to discuss game development - let's connect!
           </p>
           <motion.a
             href="/contact"
