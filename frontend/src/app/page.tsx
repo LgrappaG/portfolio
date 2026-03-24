@@ -46,21 +46,48 @@ export default function Home() {
       <section className="mb-16 md:mb-24">
         <h2 className="text-3xl md:text-4xl font-bold mb-8">🚀 Featured Projects</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {[1, 2, 3].map((i) => (
-            <div key={i} className="card-base p-6 hover:scale-105 transition-transform">
-              <div className="h-48 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg mb-4"></div>
-              <h3 className="text-xl font-bold mb-2">Project {i}</h3>
-              <p className="text-slate-600 dark:text-slate-400 mb-4">
-                Demo project - details coming soon
-              </p>
-              <div className="flex gap-2 flex-wrap">
-                <span className="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 rounded-full text-sm">
-                  React
-                </span>
-                <span className="px-3 py-1 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 rounded-full text-sm">
-                  TypeScript
-                </span>
+          {[
+            {
+              name: "E-Commerce Platform",
+              desc: "Full-stack e-commerce solution with payment integration",
+              tech: ["React", "Node.js", "PostgreSQL"]
+            },
+            {
+              name: "CMS Dashboard",
+              desc: "Modern content management system with real-time updates",
+              tech: ["Next.js", "TypeScript", "Tailwind"]
+            },
+            {
+              name: "2D Platformer Game",
+              desc: "Indie platformer game with multiple levels and mechanics",
+              tech: ["Unity", "C#"]
+            }
+          ].map((project, i) => (
+            <div
+              key={i}
+              className="card-base p-6 hover:scale-105 transition-transform cursor-pointer group"
+            >
+              <div className="h-48 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg mb-4 flex items-center justify-center group-hover:shadow-lg transition-shadow">
+                <span className="text-white font-semibold text-center px-4">{project.name}</span>
               </div>
+              <h3 className="text-xl font-bold mb-2">{project.name}</h3>
+              <p className="text-slate-600 dark:text-slate-400 mb-4">{project.desc}</p>
+              <div className="flex gap-2 flex-wrap">
+                {project.tech.map((tech, t) => (
+                  <span
+                    key={t}
+                    className="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 rounded-full text-sm"
+                  >
+                    {tech}
+                  </span>
+                ))}
+              </div>
+              <a
+                href="/projects"
+                className="mt-4 inline-block text-blue-600 dark:text-blue-400 font-semibold hover:underline"
+              >
+                Learn More →
+              </a>
             </div>
           ))}
         </div>
