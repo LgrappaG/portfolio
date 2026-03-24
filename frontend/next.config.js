@@ -3,8 +3,8 @@ const nextConfig = {
   reactStrictMode: true,
   // Static export for GitHub Pages
   output: 'export',
-  // basePath only for GitHub Pages (set by build process)
-  basePath: process.env.NODE_ENV === 'production' ? '/portfolio' : '',
+  // basePath for GitHub Pages - IMPORTANT: this is required for repository-based hosting
+  basePath: '/portfolio',
   trailingSlash: true,
 
   // Image optimization (disabled for static export)
