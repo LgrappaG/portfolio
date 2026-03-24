@@ -117,18 +117,19 @@ export default function About() {
         </div>
       </section>
 
-      {/* Stats */}
+      {/* Achievements */}
       <section className="mb-16 md:mb-24">
         <h2 className="text-2xl md:text-3xl font-bold mb-8">Achievements</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {[
-            { label: "Games Shipped", value: "8+" },
-            { label: "GitHub Stars", value: "250+" },
-            { label: "Years Experience", value: "5+" }
+            { label: "Games Shipped", value: "8+", icon: "🎮" },
+            { label: "GitHub Stars", value: "250+", icon: "⭐" },
+            { label: "Years Experience", value: "5+", icon: "🚀" }
           ].map((stat, i) => (
-            <div key={i} className="card-base p-6 text-center border-2 border-transparent hover:border-blue-400/50 dark:hover:border-blue-500/50 transition-colors">
-              <div className="text-3xl md:text-4xl font-bold text-gradient mb-2">{stat.value}</div>
-              <p className="text-slate-700 dark:text-slate-300">{stat.label}</p>
+            <div key={i} className="card-base p-8 text-center border-2 border-transparent hover:border-blue-400/50 dark:hover:border-blue-500/50 transition-colors hover:scale-105 duration-300">
+              <div className="text-5xl mb-4">{stat.icon}</div>
+              <div className="text-4xl md:text-5xl font-bold text-gradient mb-3">{stat.value}</div>
+              <p className="text-slate-700 dark:text-slate-300 text-lg font-medium">{stat.label}</p>
             </div>
           ))}
         </div>
