@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { Project, ProjectFilter, FilteredProjects } from '@/types';
+import { Project, ProjectFilter } from '@/types';
 import { projectsAPI } from '@/lib/api/projects';
 
 interface ProjectStore {
@@ -22,7 +22,7 @@ interface ProjectStore {
   setError: (error: string | null) => void;
 }
 
-export const useProjectStore = create<ProjectStore>((set, get) => ({
+export const useProjectStore = create<ProjectStore>((set) => ({
   projects: [],
   selectedProject: null,
   isLoading: false,

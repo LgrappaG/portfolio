@@ -3,7 +3,8 @@ const nextConfig = {
   reactStrictMode: true,
   // Static export for GitHub Pages
   output: 'export',
-  basePath: '/Workflows-Agents',
+  // basePath only for GitHub Pages (set by build process)
+  basePath: process.env.NODE_ENV === 'production' ? '/Workflows-Agents' : '',
   trailingSlash: true,
 
   // Image optimization (disabled for static export)

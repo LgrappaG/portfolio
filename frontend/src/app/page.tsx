@@ -1,5 +1,3 @@
-import { Suspense } from 'react';
-
 export default function Home() {
   return (
     <div className="container-max container-px py-12 md:py-20">
