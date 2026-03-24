@@ -44,7 +44,7 @@ jobs:
         working-directory: ./frontend
         env:
           NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL || format('{0}/api', github.server_url) }}
-          NEXT_PUBLIC_SITE_URL: https://lgrapag.github.io/Workflows-Agents/
+          NEXT_PUBLIC_SITE_URL: https://lgrapag.github.io/portfolio/
         run: npm run build
 
       - name: Verify static export
