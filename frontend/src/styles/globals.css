@@ -24,11 +24,11 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-image: url('/images/Background.jpg');
+    background-image: url('/portfolio/images/Background.jpg');
     background-attachment: fixed;
-    background-position: center;
+    background-position: 0 0;
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: 100% 100%;
     filter: blur(40px);
     opacity: 0.15;
     z-index: -1;
