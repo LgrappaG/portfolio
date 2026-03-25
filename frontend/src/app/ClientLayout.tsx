@@ -19,6 +19,16 @@ export function ClientLayout({ children }: ClientLayoutProps) {
     <>
       {showSplash && <SplashScreen onComplete={handleSplashComplete} />}
       <div className="flex flex-col min-h-screen relative">
+        {/* Background image - parallax effect */}
+        <div
+          className="fixed inset-0 -z-10 bg-cover bg-no-repeat"
+          style={{
+            backgroundImage: "url('/portfolio/images/background.jpg')",
+            backgroundAttachment: 'fixed',
+            backgroundPosition: 'top center',
+          }}
+        />
+
         {/* Main content wrapper */}
         <div className="relative z-10">
           {/* Header */}
