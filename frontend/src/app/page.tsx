@@ -101,7 +101,7 @@ export default function Home() {
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
+    hidden: { opacity: 1, y: 0 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
   };
 
@@ -180,8 +180,8 @@ export default function Home() {
       <div className="container-max container-px py-16 md:py-24">
         <motion.section
           variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
+          initial="visible"
+          animate="visible"
           viewport={{ once: true }}
           className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16 md:mb-24"
         >
@@ -205,8 +205,8 @@ export default function Home() {
         {/* Featured Projects */}
         <motion.section
           id="projects"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
+          initial={{ opacity: 1 }}
+          animate={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
           className="mb-16 md:mb-24"
@@ -287,8 +287,8 @@ export default function Home() {
 
         {/* CTA Section */}
         <motion.section
-          initial={{ opacity: 0, scale: 0.9 }}
-          whileInView={{ opacity: 1, scale: 1 }}
+          initial={{ opacity: 1, scale: 1 }}
+          animate={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
           className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-3xl p-12 md:p-16 text-center text-white"
