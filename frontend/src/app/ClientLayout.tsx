@@ -25,7 +25,8 @@ export function ClientLayout({ children }: ClientLayoutProps) {
           style={{
             backgroundImage: "url('/portfolio/images/Background.jpg')",
             backgroundAttachment: 'fixed',
-            backgroundPosition: 'top center',
+            backgroundPosition: 'center top',
+            backgroundSize: 'cover',
           }}
         />
 
