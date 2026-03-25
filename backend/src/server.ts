@@ -10,6 +10,7 @@ import { GitHubSyncJob } from '@/jobs/githubSyncJob';
 import { logger } from '@/utils/logger';
 import createProjectRoutes from '@/routes/projectRoutes';
 import createGitHubRoutes from '@/routes/githubRoutes';
+import createContactRoutes from '@/routes/contactRoutes';
 
 dotenv.config();
 
@@ -94,6 +95,9 @@ app.use('/api/projects', createProjectRoutes(githubService, projectService, cach
 
 // Register GitHub routes
 app.use('/api/github', createGitHubRoutes(githubService, projectService, cacheService));
+
+// Register contact routes
+app.use('/api/contact', createContactRoutes());
 
 // ============================================
 // ERROR HANDLING

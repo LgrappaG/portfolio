@@ -3,22 +3,41 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Github, Mail, Linkedin, ArrowRight } from 'lucide-react';
+import { contactAPI, ContactFormData } from '@/lib/api/contact';
 
 export default function Contact() {
   const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
+    setError(null);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
-    setSubmitted(true);
-    setTimeout(() => setSubmitted(false), 3000);
-    setFormData({ name: '', email: '', subject: '', message: '' });
+    setError(null);
+    setLoading(true);
+
+    try {
+      const response = await contactAPI.sendContactForm(formData as ContactFormData);
+
+      if (response.success) {
+        setSubmitted(true);
+        setFormData({ name: '', email: '', subject: '', message: '' });
+        setTimeout(() => setSubmitted(false), 5000);
+      } else {
+        setError(response.message || 'Failed to send message. Please try again.');
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Network error. Please try again.');
+      console.error('Contact form error:', err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -81,8 +100,8 @@ export default function Contact() {
                   <Mail size={24} />
                   <h3 className="text-xl font-black">Email</h3>
                 </div>
-                <a href="mailto:contact@example.com" className="text-amber-600 dark:text-amber-400 hover:underline font-semibold">
-                  contact@example.com
+                <a href="mailto:rondomman422@gmail.com" className="text-amber-600 dark:text-amber-400 hover:underline font-semibold">
+                  rondomman422@gmail.com
                 </a>
               </div>
 
@@ -176,10 +195,22 @@ export default function Contact() {
                   {/* Submit Button */}
                   <button
                     type="submit"
-                    className="w-full px-6 py-4 bg-black dark:bg-white text-white dark:text-black font-black uppercase tracking-widest hover:shadow-lg transition-all"
+                    disabled={loading}
+                    className="w-full px-6 py-4 bg-black dark:bg-white text-white dark:text-black font-black uppercase tracking-widest hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    Send Message
+                    {loading ? 'Sending...' : 'Send Message'}
                   </button>
+
+                  {/* Error Message */}
+                  {error && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="p-4 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 border-2 border-red-300 dark:border-red-700 font-semibold"
+                    >
+                      ✗ {error}
+                    </motion.div>
+                  )}
 
                   {/* Success Message */}
                   {submitted && (
