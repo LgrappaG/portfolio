@@ -3,5 +3,7 @@ backend/dist
 backend/prisma
 backend/tsconfig.json
 backend/.env*
+backend/package-lock.json
 frontend
+
 

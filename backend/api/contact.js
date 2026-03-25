@@ -1,7 +1,6 @@
-import { VercelRequest, VercelResponse } from '@vercel/node';
-import nodemailer from 'nodemailer';
+const nodemailer = require('nodemailer');
 
-// Validate environment variables at startup
+// Validate environment variables
 if (!process.env.EMAIL_USER || !process.env.EMAIL_PASSWORD) {
   console.error('Missing EMAIL_USER or EMAIL_PASSWORD environment variables');
 }
@@ -15,24 +14,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-interface ContactRequest {
-  name: string;
-  email: string;
-  subject: string;
-  message: string;
-}
-
-interface ApiResponse<T> {
-  success: boolean;
-  data?: T;
-  message?: string;
-  error?: string;
-}
-
-export default async function handler(
-  req: VercelRequest,
-  res: VercelResponse
-): Promise<void> {
+module.exports = async (req, res) => {
   // Only allow POST requests
   if (req.method !== 'POST') {
     res.status(405).json({
@@ -44,7 +26,7 @@ export default async function handler(
   }
 
   try {
-    const { name, email, subject, message } = req.body as ContactRequest;
+    const { name, email, subject, message } = req.body;
 
     // Validation
     if (!name?.trim()) {
@@ -52,7 +34,7 @@ export default async function handler(
         success: false,
         error: 'Bad Request',
         message: 'Name is required',
-      } as ApiResponse<null>);
+      });
       return;
     }
 
@@ -61,7 +43,7 @@ export default async function handler(
         success: false,
         error: 'Bad Request',
         message: 'Email is required',
-      } as ApiResponse<null>);
+      });
       return;
     }
 
@@ -70,7 +52,7 @@ export default async function handler(
         success: false,
         error: 'Bad Request',
         message: 'Subject is required',
-      } as ApiResponse<null>);
+      });
       return;
     }
 
@@ -79,7 +61,7 @@ export default async function handler(
         success: false,
         error: 'Bad Request',
         message: 'Message is required',
-      } as ApiResponse<null>);
+      });
       return;
     }
 
@@ -90,7 +72,7 @@ export default async function handler(
         success: false,
         error: 'Bad Request',
         message: 'Invalid email format',
-      } as ApiResponse<null>);
+      });
       return;
     }
 
@@ -125,13 +107,13 @@ export default async function handler(
     res.status(200).json({
       success: true,
       message: 'Email sent successfully',
-    } as ApiResponse<null>);
+    });
   } catch (error) {
     console.error('Contact email error:', error);
     res.status(500).json({
       success: false,
       error: 'Internal Server Error',
       message: error instanceof Error ? error.message : 'Failed to send email',
-    } as ApiResponse<null>);
+    });
   }
-}
+};
