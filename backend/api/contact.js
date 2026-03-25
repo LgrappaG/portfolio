@@ -9,7 +9,9 @@ const setCorsHeaders = (res) => {
 
 // Validate environment variables
 if (!process.env.EMAIL_USER || !process.env.EMAIL_PASSWORD) {
-  console.error('Missing EMAIL_USER or EMAIL_PASSWORD environment variables');
+  console.error('❌ Missing EMAIL_USER or EMAIL_PASSWORD environment variables');
+  console.error('EMAIL_USER:', process.env.EMAIL_USER ? '✅ Set' : '❌ Missing');
+  console.error('EMAIL_PASSWORD:', process.env.EMAIL_PASSWORD ? '✅ Set' : '❌ Missing');
 }
 
 // Initialize email transporter
@@ -43,6 +45,8 @@ module.exports = async (req, res) => {
 
   try {
     const { name, email, subject, message } = req.body;
+
+    console.log('📨 Contact form received:', { name, email, subject });
 
     // Validation
     if (!name?.trim()) {
@@ -111,6 +115,7 @@ module.exports = async (req, res) => {
     `;
 
     // Send email
+    console.log('📤 Sending email to rondomman422@gmail.com...');
     await transporter.sendMail({
       from: process.env.EMAIL_USER,
       to: 'rondomman422@gmail.com',
@@ -119,13 +124,15 @@ module.exports = async (req, res) => {
       text: `From: ${name}\nEmail: ${email}\n\n${message}`,
       replyTo: email,
     });
+    console.log('✅ Email sent successfully');
 
     res.status(200).json({
       success: true,
       message: 'Email sent successfully',
     });
   } catch (error) {
-    console.error('Contact email error:', error);
+    console.error('❌ Contact email error:', error.message);
+    console.error('Stack:', error.stack);
     res.status(500).json({
       success: false,
       error: 'Internal Server Error',
