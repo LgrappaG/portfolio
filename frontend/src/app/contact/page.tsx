@@ -158,7 +158,7 @@ export default function Contact() {
                       value={formData.email}
                       onChange={handleChange}
                       required
-                      className="w-full px-4 py-3 bg-white dark:bg-black border-2 border-slate-200 dark:border-slate-700 hover:border-amber-500 dark:hover:border-amber-400 focus:border-amber-500 dark:focus:border-amber-400 focus:shadow-lg focus:shadow-amber-500/30 dark:focus:shadow-amber-400/30 transition-colors outline-none"
+                      className="w-full px-4 py-3 bg-white dark:bg-black border-2 border-slate-200 dark:border-slate-700 hover:border-amber-500 dark:hover:border-amber-400 focus:border-amber-500 dark:focus:border-amber-400 transition-colors outline-none"
                       placeholder="your@email.com"
                     />
                   </div>
@@ -172,7 +172,7 @@ export default function Contact() {
                       value={formData.subject}
                       onChange={handleChange}
                       required
-                      className="w-full px-4 py-3 bg-white dark:bg-black border-2 border-slate-200 dark:border-slate-700 hover:border-amber-500 dark:hover:border-amber-400 focus:border-amber-500 dark:focus:border-amber-400 focus:shadow-lg focus:shadow-amber-500/30 dark:focus:shadow-amber-400/30 transition-colors outline-none"
+                      className="w-full px-4 py-3 bg-white dark:bg-black border-2 border-slate-200 dark:border-slate-700 hover:border-amber-500 dark:hover:border-amber-400 focus:border-amber-500 dark:focus:border-amber-400 transition-colors outline-none"
                       placeholder="What's this about?"
                     />
                   </div>
@@ -186,7 +186,7 @@ export default function Contact() {
                       onChange={handleChange}
                       required
                       rows={6}
-                      className="w-full px-4 py-3 bg-white dark:bg-black border-2 border-slate-200 dark:border-slate-700 hover:border-amber-500 dark:hover:border-amber-400 focus:border-amber-500 dark:focus:border-amber-400 focus:shadow-lg focus:shadow-amber-500/30 dark:focus:shadow-amber-400/30 transition-colors outline-none resize-none"
+                      className="w-full px-4 py-3 bg-white dark:bg-black border-2 border-slate-200 dark:border-slate-700 hover:border-amber-500 dark:hover:border-amber-400 focus:border-amber-500 dark:focus:border-amber-400 transition-colors outline-none resize-none"
                       placeholder="Your message here..."
                     />
                   </div>
