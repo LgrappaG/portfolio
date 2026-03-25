@@ -145,6 +145,7 @@ export default function Contact() {
                       value={formData.name}
                       onChange={handleChange}
                       required
+                      placeholder="Your name"
                       className="w-full px-4 py-3 bg-white dark:bg-black border-2 border-slate-200 dark:border-slate-700 hover:border-amber-500 dark:hover:border-amber-400 focus:border-amber-500 dark:focus:border-amber-400 focus:ring-0 transition-colors outline-none"
                     />
                   </div>
@@ -283,7 +284,7 @@ export default function Contact() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
-            className="bg-black dark:bg-white text-white dark:text-black p-12 md:p-16 lg:p-20"
+            className="bg-transparent text-black dark:text-white p-12 md:p-16 lg:p-20"
           >
             <div className="max-w-2xl mx-auto text-center space-y-8">
               <h2 className="text-4xl md:text-5xl font-black italic">
