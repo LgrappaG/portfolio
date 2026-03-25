@@ -1,0 +1,12 @@
+{
+  "functions": {
+    "api/**/*.ts": {
+      "runtime": "nodejs18.x"
+    }
+  },
+  "buildCommand": "cd backend && npm install && npm run build",
+  "outputDirectory": "backend/out",
+  "env": {
+    "NEXT_PUBLIC_API_URL": "https://portfolio-backend.vercel.app"
+  }
+}
