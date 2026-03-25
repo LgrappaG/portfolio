@@ -145,7 +145,7 @@ export default function Contact() {
                       value={formData.name}
                       onChange={handleChange}
                       required
-                      className="w-full px-4 py-3 bg-white dark:bg-black border-2 border-slate-200 dark:border-slate-700 hover:border-amber-500 dark:hover:border-amber-400 focus:border-amber-500 dark:focus:border-amber-400 transition-colors outline-none"
+                      className="w-full px-4 py-3 bg-white dark:bg-black border-2 border-slate-200 dark:border-slate-700 hover:border-amber-500 dark:hover:border-amber-400 focus:border-amber-500 dark:focus:border-amber-400 focus:ring-0 transition-colors outline-none"
                     />
                   </div>
 
@@ -158,7 +158,7 @@ export default function Contact() {
                       value={formData.email}
                       onChange={handleChange}
                       required
-                      className="w-full px-4 py-3 bg-white dark:bg-black border-2 border-slate-200 dark:border-slate-700 hover:border-amber-500 dark:hover:border-amber-400 focus:border-amber-500 dark:focus:border-amber-400 transition-colors outline-none"
+                      className="w-full px-4 py-3 bg-white dark:bg-black border-2 border-slate-200 dark:border-slate-700 hover:border-amber-500 dark:hover:border-amber-400 focus:border-amber-500 dark:focus:border-amber-400 focus:ring-0 transition-colors outline-none"
                       placeholder="your@email.com"
                     />
                   </div>
@@ -172,7 +172,7 @@ export default function Contact() {
                       value={formData.subject}
                       onChange={handleChange}
                       required
-                      className="w-full px-4 py-3 bg-white dark:bg-black border-2 border-slate-200 dark:border-slate-700 hover:border-amber-500 dark:hover:border-amber-400 focus:border-amber-500 dark:focus:border-amber-400 transition-colors outline-none"
+                      className="w-full px-4 py-3 bg-white dark:bg-black border-2 border-slate-200 dark:border-slate-700 hover:border-amber-500 dark:hover:border-amber-400 focus:border-amber-500 dark:focus:border-amber-400 focus:ring-0 transition-colors outline-none"
                       placeholder="What's this about?"
                     />
                   </div>

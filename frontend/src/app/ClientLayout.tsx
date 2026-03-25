@@ -23,7 +23,7 @@ export function ClientLayout({ children }: ClientLayoutProps) {
         <div
           className="fixed inset-0 -z-10 bg-cover bg-no-repeat"
           style={{
-            backgroundImage: "url('/portfolio/images/background.jpg')",
+            backgroundImage: "url('/portfolio/images/Background.jpg')",
             backgroundAttachment: 'fixed',
             backgroundPosition: 'top center',
           }}
