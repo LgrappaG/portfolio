@@ -1,10 +1,13 @@
 {
+  "buildCommand": "echo 'Serverless functions only - no build output needed'",
+  "outputDirectory": ".",
   "functions": {
     "backend/api/**/*.js": {
       "runtime": "nodejs18.x"
     }
   }
 }
+
 
 
 
