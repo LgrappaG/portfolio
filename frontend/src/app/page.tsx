@@ -90,19 +90,19 @@ export default function Home() {
               transition={{ duration: 0.8 }}
               className="lg:col-span-5 space-y-8"
             >
-              {/* Decorative Element */}
-              <div className="inline-block">
-                <div className="w-1 h-12 bg-gradient-to-b from-amber-500 to-orange-500"></div>
-              </div>
-
-              {/* Main Heading */}
-              <div className="space-y-4">
-                <p className="text-sm md:text-base tracking-widest text-amber-600 dark:text-amber-400 font-light uppercase">
-                  Welcome to my portfolio
-                </p>
-                <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold italic text-black dark:text-white leading-tight">
-                  Game Developer & Full Stack Developer
-                </h1>
+              {/* Decorative Element + Main Heading */}
+              <div className="flex items-start gap-4">
+                <div className="flex-shrink-0 pt-1">
+                  <div className="w-1 h-12 bg-gradient-to-b from-amber-500 to-orange-500"></div>
+                </div>
+                <div className="space-y-4">
+                  <p className="text-sm md:text-base tracking-widest text-amber-600 dark:text-amber-400 font-light uppercase">
+                    Welcome to my portfolio
+                  </p>
+                  <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold italic text-black dark:text-white leading-tight">
+                    Game Developer & Full Stack Developer
+                  </h1>
+                </div>
               </div>
 
               {/* Bio */}
@@ -239,17 +239,21 @@ export default function Home() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
-            className="space-y-4 mb-16"
+            className="mb-16"
           >
-            <div className="inline-block">
-              <div className="w-1 h-12 bg-gradient-to-b from-amber-500 to-orange-500"></div>
+            <div className="flex items-start gap-4">
+              <div className="flex-shrink-0 pt-1">
+                <div className="w-1 h-12 bg-gradient-to-b from-amber-500 to-orange-500"></div>
+              </div>
+              <div className="space-y-4">
+                <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold italic">
+                  Featured <span className="text-gradient">Projects</span>
+                </h2>
+                <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl italic font-light">
+                  A selection of my most recent and impactful game development work
+                </p>
+              </div>
             </div>
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold italic">
-              Featured <span className="text-gradient">Projects</span>
-            </h2>
-            <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl italic font-light">
-              A selection of my most recent and impactful game development work
-            </p>
           </motion.div>
 
           {/* Projects Grid */}
