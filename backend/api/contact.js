@@ -1,5 +1,12 @@
 const nodemailer = require('nodemailer');
 
+// CORS headers helper
+const setCorsHeaders = (res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+};
+
 // Validate environment variables
 if (!process.env.EMAIL_USER || !process.env.EMAIL_PASSWORD) {
   console.error('Missing EMAIL_USER or EMAIL_PASSWORD environment variables');
@@ -15,6 +22,15 @@ const transporter = nodemailer.createTransport({
 });
 
 module.exports = async (req, res) => {
+  // Set CORS headers for all requests
+  setCorsHeaders(res);
+
+  // Handle preflight OPTIONS request
+  if (req.method === 'OPTIONS') {
+    res.status(200).end();
+    return;
+  }
+
   // Only allow POST requests
   if (req.method !== 'POST') {
     res.status(405).json({
