@@ -19,6 +19,11 @@ export default function About() {
       category: 'Tools & Other',
       icon: '🛠️',
       items: ['React & Next.js', 'Blender (3D)', 'UI/UX Design', 'Level Design', 'Asset Management', 'Scripting']
+    },
+    {
+      category: 'VR & XR',
+      icon: '🥽',
+      items: ['VR Development', 'Meta Quest / Oculus', 'SteamVR', 'VR Interactions & Locomotion', 'VR UI/UX Design', 'Mixed Reality (XR)']
     }
   ];
 
