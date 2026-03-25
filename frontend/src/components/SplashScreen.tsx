@@ -50,7 +50,8 @@ export const SplashScreen = ({ onComplete }: SplashScreenProps) => {
             </svg>
           </div>
 
-          <div className="relative z-10">
+          {/* Center container using flex to align SVG and text vertically */}
+          <div className="relative z-10 flex flex-col items-center">
             <svg
               width="300"
               height="340"
@@ -222,12 +223,12 @@ export const SplashScreen = ({ onComplete }: SplashScreenProps) => {
               </motion.g>
             </svg>
 
-            {/* Text indicator */}
+            {/* Text indicator - positioned below SVG, centered with flex */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1.2, duration: 0.5, ease: 'easeOut' }}
-              className="absolute top-full mt-12 left-1/2 transform -translate-x-1/2 whitespace-nowrap"
+              className="mt-12 flex flex-col items-center whitespace-nowrap"
             >
               <motion.div
                 animate={{ width: ['0%', '30%', '60%', '90%', '100%'] }}
