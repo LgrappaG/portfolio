@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
+import Image from 'next/image';
 
 export default function About() {
   const skills = [
@@ -80,20 +81,15 @@ export default function About() {
               className="flex items-center justify-center"
             >
               <div className="relative w-full aspect-square max-w-sm">
-                {/* Image Placeholder with Border */}
-                <div className="w-full h-full bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-900 border-2 border-slate-300 dark:border-slate-700 rounded-lg overflow-hidden flex items-center justify-center relative group">
-                  {/* SVG Placeholder */}
-                  <svg className="w-24 h-24 text-slate-400 dark:text-slate-600" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-                  </svg>
-
-                  {/* Hover Effect */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-amber-500/10 to-orange-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-
-                  {/* Text Overlay */}
-                  <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/40 opacity-0 group-hover:opacity-100 transition-all duration-300 rounded-lg">
-                    <p className="text-white text-sm font-semibold text-center">Profile Image</p>
-                  </div>
+                {/* Image with Border */}
+                <div className="w-full h-full relative rounded-lg overflow-hidden border-2 border-slate-300 dark:border-slate-700">
+                  <Image
+                    src="/images/about.jpg"
+                    alt="Profile"
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                  />
                 </div>
 
                 {/* Decorative Border */}

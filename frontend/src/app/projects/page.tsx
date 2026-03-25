@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Star, Eye, ArrowRight } from 'lucide-react';
+import Image from 'next/image';
 
 interface GitHubRepo {
   id: number;
@@ -73,61 +74,43 @@ export default function Projects() {
       {/* Hero Section */}
       <section className="py-24 md:py-32 border-b border-slate-200 dark:border-slate-800">
         <div className="container-max container-px">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="max-w-3xl"
-          >
-            <p className="text-sm md:text-base tracking-widest text-amber-600 dark:text-amber-400 font-light uppercase mb-4">
-              Projects
-            </p>
-            <h1 className="text-5xl md:text-7xl font-black italic mb-6 leading-tight">
-              All Projects & Works
-            </h1>
-            <p className="text-xl md:text-2xl text-slate-700 dark:text-slate-300 leading-relaxed font-light max-w-2xl">
-              Complete collection of game development projects featuring C#, Unity, and innovative gameplay mechanics
-            </p>
-          </motion.div>
-        </div>
-      </section>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-16 items-center">
+            {/* Left - Content */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
+            >
+              <p className="text-sm md:text-base tracking-widest text-amber-600 dark:text-amber-400 font-light uppercase mb-4">
+                Projects
+              </p>
+              <h1 className="text-5xl md:text-7xl font-black italic mb-6 leading-tight">
+                All Projects & Works
+              </h1>
+              <p className="text-xl md:text-2xl text-slate-700 dark:text-slate-300 leading-relaxed font-light max-w-2xl">
+                Complete collection of game development projects featuring C#, Unity, and innovative gameplay mechanics
+              </p>
+            </motion.div>
 
-      {/* Showcase Section */}
-      <section className="py-24 md:py-32 border-b border-slate-200 dark:border-slate-800">
-        <div className="container-max container-px">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="mb-12"
-          >
-            <h2 className="text-3xl md:text-4xl font-black italic mb-8">Featured Showcase</h2>
-
-            {/* Showcase Image Placeholder */}
-            <div className="relative w-full aspect-video bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-900 border-2 border-slate-300 dark:border-slate-700 rounded-lg overflow-hidden group">
-              {/* SVG Placeholder */}
-              <div className="w-full h-full flex items-center justify-center">
-                <svg className="w-32 h-32 text-slate-400 dark:text-slate-600" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z" />
-                </svg>
+            {/* Right - Image */}
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="relative w-full aspect-video max-w-md mx-auto lg:mx-0"
+            >
+              <div className="relative w-full h-full rounded-lg overflow-hidden border-2 border-slate-300 dark:border-slate-700">
+                <Image
+                  src="/images/project.jpg"
+                  alt="Projects showcase"
+                  fill
+                  className="object-cover"
+                  priority
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                />
               </div>
-
-              {/* Hover Effect */}
-              <div className="absolute inset-0 bg-gradient-to-r from-amber-500/10 to-orange-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-
-              {/* Text Overlay */}
-              <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/40 opacity-0 group-hover:opacity-100 transition-all duration-300">
-                <div className="text-center">
-                  <p className="text-white text-lg font-semibold">Featured Project Showcase</p>
-                  <p className="text-gray-200 text-sm mt-2">Add your best project image here</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Decorative Border */}
-            <div className="absolute -inset-4 mt-2 border border-dashed border-amber-500 dark:border-amber-400 rounded-lg opacity-30 pointer-events-none"></div>
-          </motion.div>
+            </motion.div>
+          </div>
         </div>
       </section>
 
