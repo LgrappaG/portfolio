@@ -34,16 +34,6 @@ export default function Projects() {
           throw new Error(`GitHub API error: ${userRes.status} ${reposRes.status}`);
         }
 
-        const gameProjects = reposData
-          .filter((repo: GitHubRepo) => {
-            const isGameDev =
-              repo.language === 'C#' ||
-              repo.language === 'C++' ||
-              (repo.description && (repo.description.toLowerCase().includes('game') || repo.description.toLowerCase().includes('unity'))) ||
-              repo.topics?.some((t: string) => ['game', 'unity', 'gamedev', 'game-development', 'c-sharp'].includes(t.toLowerCase()));
-            return isGameDev;
-          });
-
         let totalStars = 0;
         reposData.forEach((repo: GitHubRepo) => {
           totalStars += repo.stargazers_count || 0;
@@ -55,8 +45,7 @@ export default function Projects() {
           followers: userData.followers || 0
         });
 
-        const projectsToShow = gameProjects.length > 0 ? gameProjects : reposData;
-        setProjects(projectsToShow);
+        setProjects(reposData);  // Show ALL projects including portfolio
       } catch (error) {
         console.error('Failed to fetch GitHub data:', error);
       } finally {
