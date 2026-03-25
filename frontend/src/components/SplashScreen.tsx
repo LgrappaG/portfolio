@@ -29,31 +29,40 @@ export const SplashScreen = ({ onComplete }: SplashScreenProps) => {
           transition={{ duration: 0.4 }}
           className="fixed inset-0 z-50 flex items-center justify-center"
           style={{
-            background: 'linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 50%, #16213e 100%)',
+            background: 'linear-gradient(135deg, #0a0e27 0%, #1a1a3e 50%, #0f1a3a 100%)',
           }}
         >
           <div className="relative">
             <svg
-              width="200"
-              height="240"
-              viewBox="0 0 200 240"
+              width="280"
+              height="320"
+              viewBox="0 0 280 320"
               className="drop-shadow-2xl"
               style={{
-                filter: 'drop-shadow(0 30px 60px rgba(255,255,255,0.15))',
+                filter: 'drop-shadow(0 25px 50px rgba(251,146,60,0.2))',
               }}
             >
-              {/* Vertical line of L - outline stroke with dash animation */}
+              <defs>
+                <linearGradient id="lGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#f59e0b" />
+                  <stop offset="50%" stopColor="#fb923c" />
+                  <stop offset="100%" stopColor="#ea580c" />
+                </linearGradient>
+              </defs>
+
+              {/* Vertical part of L - outline with sharp edges */}
               <motion.line
-                x1="50"
-                y1="200"
-                x2="50"
+                x1="80"
+                y1="260"
+                x2="80"
                 y2="40"
-                stroke="rgba(255,255,255,0.8)"
-                strokeWidth="4"
-                strokeLinecap="round"
-                strokeDasharray="160"
-                strokeDashoffset="160"
-                initial={{ strokeDashoffset: 160, opacity: 0 }}
+                stroke="url(#lGradient)"
+                strokeWidth="6"
+                strokeLinecap="butt"
+                strokeLinejoin="miter"
+                strokeDasharray="220"
+                strokeDashoffset="220"
+                initial={{ strokeDashoffset: 220, opacity: 0 }}
                 animate={{ strokeDashoffset: 0, opacity: 1 }}
                 transition={{
                   strokeDashoffset: { duration: 1.4, ease: 'easeInOut' },
@@ -61,18 +70,19 @@ export const SplashScreen = ({ onComplete }: SplashScreenProps) => {
                 }}
               />
 
-              {/* Horizontal line of L - left to right */}
+              {/* Horizontal part of L - bottom right, sharp edges */}
               <motion.line
-                x1="50"
-                y1="200"
-                x2="150"
-                y2="200"
-                stroke="rgba(255,255,255,0.8)"
-                strokeWidth="4"
-                strokeLinecap="round"
-                strokeDasharray="100"
-                strokeDashoffset="100"
-                initial={{ strokeDashoffset: 100, opacity: 0 }}
+                x1="80"
+                y1="260"
+                x2="220"
+                y2="260"
+                stroke="url(#lGradient)"
+                strokeWidth="6"
+                strokeLinecap="butt"
+                strokeLinejoin="miter"
+                strokeDasharray="140"
+                strokeDashoffset="140"
+                initial={{ strokeDashoffset: 140, opacity: 0 }}
                 animate={{ strokeDashoffset: 0, opacity: 1 }}
                 transition={{
                   delay: 0.3,
@@ -83,13 +93,14 @@ export const SplashScreen = ({ onComplete }: SplashScreenProps) => {
 
               {/* Fill animation - vertical (bottom to top) */}
               <motion.rect
-                x="46"
+                x="74"
                 y="40"
-                width="8"
-                height="160"
-                fill="rgba(255,255,255,0.25)"
-                initial={{ y: 200, height: 0 }}
-                animate={{ y: 40, height: 160 }}
+                width="12"
+                height="220"
+                fill="url(#lGradient)"
+                opacity="0.35"
+                initial={{ y: 260, height: 0 }}
+                animate={{ y: 40, height: 220 }}
                 transition={{
                   duration: 1.4,
                   ease: 'easeInOut',
@@ -98,13 +109,14 @@ export const SplashScreen = ({ onComplete }: SplashScreenProps) => {
 
               {/* Fill animation - horizontal (left to right) */}
               <motion.rect
-                x="50"
-                y="196"
+                x="80"
+                y="254"
                 width="0"
-                height="8"
-                fill="rgba(255,255,255,0.25)"
+                height="12"
+                fill="url(#lGradient)"
+                opacity="0.35"
                 initial={{ width: 0 }}
-                animate={{ width: 100 }}
+                animate={{ width: 140 }}
                 transition={{
                   delay: 0.3,
                   duration: 1.2,
@@ -114,47 +126,47 @@ export const SplashScreen = ({ onComplete }: SplashScreenProps) => {
 
               {/* Glow effect - vertical */}
               <motion.line
-                x1="50"
-                y1="200"
-                x2="50"
+                x1="80"
+                y1="260"
+                x2="80"
                 y2="40"
-                stroke="rgba(100,200,255,0.3)"
-                strokeWidth="8"
-                strokeLinecap="round"
+                stroke="rgba(251,146,60,0.4)"
+                strokeWidth="14"
+                strokeLinecap="butt"
                 opacity="0"
-                initial={{ strokeDashoffset: 160, opacity: 0 }}
+                initial={{ strokeDashoffset: 220, opacity: 0 }}
                 animate={{
-                  strokeDashoffset: [160, 0, 0],
-                  opacity: [0, 0.6, 0],
+                  strokeDashoffset: [220, 0, 0],
+                  opacity: [0, 0.4, 0],
                 }}
                 transition={{
                   strokeDashoffset: { duration: 1.4, ease: 'easeInOut' },
                   opacity: { duration: 1.4, ease: 'easeInOut' },
                 }}
-                strokeDasharray="160"
+                strokeDasharray="220"
               />
 
               {/* Glow effect - horizontal */}
               <motion.line
-                x1="50"
-                y1="200"
-                x2="150"
-                y2="200"
-                stroke="rgba(100,200,255,0.3)"
-                strokeWidth="8"
-                strokeLinecap="round"
+                x1="80"
+                y1="260"
+                x2="220"
+                y2="260"
+                stroke="rgba(251,146,60,0.4)"
+                strokeWidth="14"
+                strokeLinecap="butt"
                 opacity="0"
-                initial={{ strokeDashoffset: 100, opacity: 0 }}
+                initial={{ strokeDashoffset: 140, opacity: 0 }}
                 animate={{
-                  strokeDashoffset: [100, 0, 0],
-                  opacity: [0, 0.6, 0],
+                  strokeDashoffset: [140, 0, 0],
+                  opacity: [0, 0.4, 0],
                 }}
                 transition={{
                   delay: 0.3,
                   strokeDashoffset: { duration: 1.2, ease: 'easeInOut' },
                   opacity: { duration: 1.2, ease: 'easeInOut' },
                 }}
-                strokeDasharray="100"
+                strokeDasharray="140"
               />
             </svg>
 
@@ -163,11 +175,11 @@ export const SplashScreen = ({ onComplete }: SplashScreenProps) => {
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1.9, duration: 0.4, ease: 'easeOut' }}
-              className="absolute top-full mt-8 left-1/2 transform -translate-x-1/2 whitespace-nowrap"
+              className="absolute top-full mt-10 left-1/2 transform -translate-x-1/2 whitespace-nowrap"
             >
               <motion.span
-                className="text-white text-sm tracking-[0.15em] font-extralight"
-                animate={{ opacity: [0.4, 1, 0.4] }}
+                className="text-orange-400 text-sm tracking-[0.2em] font-semibold"
+                animate={{ opacity: [0.5, 1, 0.5] }}
                 transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
               >
                 LOADING
