@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Star, Eye } from 'lucide-react';
+import { Star, Eye, Github } from 'lucide-react';
 
 interface GitHubRepo {
   id: number;
@@ -31,6 +31,11 @@ export default function Projects() {
         const reposRes = await fetch('https://api.github.com/users/LgrappaG/repos?per_page=100&sort=stars');
         const reposData = await reposRes.json();
 
+        // Check for API errors
+        if (!userRes.ok || !reposRes.ok) {
+          throw new Error(`GitHub API error: ${userRes.status} ${reposRes.status}`);
+        }
+
         // Filter game dev related projects (C#, Unity, Godot keywords)
         const gameProjects = reposData
           .filter((repo: GitHubRepo) => {
@@ -57,6 +62,7 @@ export default function Projects() {
         setProjects(gameProjects);
       } catch (error) {
         console.error('Failed to fetch GitHub data:', error);
+        // Keep previous state on error (don't clear projects)
       } finally {
         setLoading(false);
       }
@@ -117,7 +123,7 @@ export default function Projects() {
               >
                 <div className="h-40 bg-gradient-to-br from-blue-500 to-purple-500 rounded-lg mb-4 flex items-center justify-center group-hover:shadow-lg transition-shadow relative">
                   <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all rounded-lg"></div>
-                  <span className="text-white font-bold text-center px-4 relative z-10">{project.name}</span>
+                  <Github size={48} className="text-white" />
                 </div>
                 <h3 className="text-lg font-bold mb-2 text-blue-700 dark:text-blue-300 group-hover:text-blue-600 dark:group-hover:text-blue-200 transition-colors">
                   {project.name}
@@ -183,7 +189,7 @@ export default function Projects() {
         <h2 className="text-3xl font-bold mb-4">Have a Project in Mind?</h2>
         <p className="text-lg mb-8 opacity-90">Let's discuss how I can help bring your vision to life</p>
         <a
-          href="/contact"
+          href="/portfolio/contact/"
           className="inline-block px-8 py-3 bg-white text-blue-600 font-semibold rounded-lg hover:bg-slate-100 transition-colors"
         >
           Start a Project

@@ -31,6 +31,11 @@ export default function Home() {
         const reposRes = await fetch('https://api.github.com/users/LgrappaG/repos?per_page=100&sort=stars');
         const reposData = await reposRes.json();
 
+        // Check for API errors
+        if (!userRes.ok || !reposRes.ok) {
+          throw new Error(`GitHub API error: ${userRes.status} ${reposRes.status}`);
+        }
+
         // Filter game dev related projects (C#, Unity, Godot keywords)
         const gameProjects = reposData
           .filter((repo: GitHubRepo) => {
@@ -57,6 +62,7 @@ export default function Home() {
         setProjects(gameProjects);
       } catch (error) {
         console.error('Failed to fetch GitHub data:', error);
+        // Keep previous state on error (don't clear projects)
       } finally {
         setLoading(false);
       }
@@ -130,7 +136,7 @@ export default function Home() {
               className="flex gap-4 justify-center flex-wrap"
             >
               <motion.a
-                href="/projects"
+                href="/portfolio/projects/"
                 variants={itemVariants}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -139,7 +145,7 @@ export default function Home() {
                 View Projects
               </motion.a>
               <motion.a
-                href="/contact"
+                href="/portfolio/contact/"
                 variants={itemVariants}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -218,7 +224,7 @@ export default function Home() {
                 >
                   <div className="h-40 bg-gradient-to-br from-blue-500 to-purple-500 rounded-lg mb-4 flex items-center justify-center group-hover:shadow-lg transition-shadow relative">
                     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all rounded-lg"></div>
-                    <span className="text-white font-bold text-center px-4 relative z-10">{project.name}</span>
+                    <Github size={48} className="text-white" />
                   </div>
                   <h3 className="text-lg font-bold mb-2 text-blue-700 dark:text-blue-300 group-hover:text-blue-600 dark:group-hover:text-blue-200 transition-colors">
                     {project.name}
@@ -274,7 +280,7 @@ export default function Home() {
             Whether it's a game project, technical collaboration, or just want to discuss game development - let's connect!
           </p>
           <motion.a
-            href="/contact"
+            href="/portfolio/contact/"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             className="inline-block px-8 py-4 bg-white text-blue-600 font-bold rounded-lg hover:bg-slate-100 transition-colors"

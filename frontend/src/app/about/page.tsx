@@ -140,7 +140,7 @@ export default function About() {
         <h2 className="text-3xl font-bold mb-4">Let's Create Something Amazing</h2>
         <p className="text-lg mb-8 opacity-90">Have a game project or collaboration idea? Let's connect!</p>
         <a
-          href="/contact"
+          href="/portfolio/contact/"
           className="inline-block px-8 py-3 bg-white text-blue-600 font-semibold rounded-lg hover:bg-slate-100 transition-colors"
         >
           Get In Touch
