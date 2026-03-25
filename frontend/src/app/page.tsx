@@ -18,6 +18,7 @@ interface GitHubRepo {
 export default function Home() {
   const [stats, setStats] = useState({ repos: 0, stars: 0, followers: 0 });
   const [projects, setProjects] = useState<GitHubRepo[]>([]);
+  const [featuredProject, setFeaturedProject] = useState<GitHubRepo | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -28,6 +29,10 @@ export default function Home() {
 
         const reposRes = await fetch('https://api.github.com/users/LgrappaG/repos?per_page=100&sort=stars');
         const reposData = await reposRes.json();
+
+        // Fetch featured project
+        const featuredRes = await fetch('https://api.github.com/repos/LgrappaG/Workflows-Agents');
+        const featuredData = await featuredRes.json();
 
         if (!userRes.ok || !reposRes.ok) {
           console.error('GitHub API error:', userRes.status, reposRes.status);
@@ -58,6 +63,10 @@ export default function Home() {
 
         const projectsToShow = gameProjects.length > 0 ? gameProjects : reposData.slice(0, 3);
         setProjects(projectsToShow);
+
+        if (featuredRes.ok && featuredData.id) {
+          setFeaturedProject(featuredData);
+        }
       } catch (error) {
         console.error('Failed to fetch GitHub data:', error);
       } finally {
@@ -69,7 +78,7 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-transparent text-black dark:text-white">
+    <div className="min-h-screen bg-transparent text-white dark:text-black">
       {/* Hero Section - Elegant with Sidebar */}
       <section className="relative overflow-hidden py-24 md:py-32">
         <div className="container-max container-px">
@@ -97,7 +106,7 @@ export default function Home() {
               </div>
 
               {/* Bio */}
-              <p className="text-lg md:text-xl text-slate-700 dark:text-slate-300 leading-relaxed italic font-light max-w-md">
+              <p className="text-lg md:text-xl text-slate-300 dark:text-slate-700 leading-relaxed italic font-light max-w-md">
                 Crafting immersive gaming experiences with C# and Unity, combined with full-stack web development expertise.
               </p>
 
@@ -110,21 +119,21 @@ export default function Home() {
               >
                 <a
                   href="/portfolio/projects/"
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-black dark:bg-white text-white dark:text-black font-semibold hover:gap-3 transition-all"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-white dark:bg-black text-black dark:text-white font-semibold hover:gap-3 transition-all"
                 >
                   Explore Projects <ArrowRight size={18} />
                 </a>
                 <a
                   href="/portfolio/contact/"
-                  className="inline-flex items-center gap-2 px-6 py-3 border-2 border-black dark:border-white text-black dark:text-white font-semibold hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-all"
+                  className="inline-flex items-center gap-2 px-6 py-3 border-2 border-white dark:border-black text-white dark:text-black font-semibold hover:bg-white hover:text-black dark:hover:bg-black dark:hover:text-white transition-all"
                 >
                   Get In Touch
                 </a>
               </motion.div>
 
               {/* Social Links */}
-              <div className="flex gap-6 pt-8 border-t border-slate-300 dark:border-slate-700">
-                <a href="https://github.com/LgrappaG" target="_blank" rel="noopener noreferrer" className="text-slate-600 dark:text-slate-400 hover:text-black dark:hover:text-white transition-colors">
+              <div className="flex gap-6 pt-8 border-t border-slate-700 dark:border-slate-300">
+                <a href="https://github.com/LgrappaG" target="_blank" rel="noopener noreferrer" className="text-slate-400 dark:text-slate-600 hover:text-white dark:hover:text-black transition-colors">
                   <Github size={24} />
                 </a>
               </div>
@@ -149,22 +158,71 @@ export default function Home() {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.3 + i * 0.1 }}
-                    className="text-center p-6 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800"
+                    className="text-center p-6 bg-slate-900/50 dark:bg-slate-50 border border-slate-800 dark:border-slate-200"
                   >
                     <p className="text-3xl mb-2">{stat.icon}</p>
                     <p className="text-2xl md:text-3xl font-bold text-gradient mb-1">{stat.value}</p>
-                    <p className="text-sm text-slate-600 dark:text-slate-400 uppercase tracking-wide">{stat.label}</p>
+                    <p className="text-sm text-slate-400 dark:text-slate-600 uppercase tracking-wide">{stat.label}</p>
                   </motion.div>
                 ))}
               </div>
 
-              {/* Featured Work Placeholder */}
-              <div className="bg-gradient-to-br from-slate-100 dark:from-slate-900 to-slate-50 dark:to-slate-950 aspect-video rounded border border-slate-200 dark:border-slate-800 flex items-center justify-center">
-                <div className="text-center">
-                  <div className="text-5xl mb-3">🎮</div>
-                  <p className="text-slate-600 dark:text-slate-400 text-sm">Featured work placeholder</p>
+              {/* Featured Work */}
+              {loading ? (
+                <div className="bg-gradient-to-br from-slate-900 dark:from-slate-100 to-slate-950 dark:to-slate-50 aspect-video rounded border border-slate-800 dark:border-slate-200 flex items-center justify-center">
+                  <div className="text-center">
+                    <p className="text-slate-400 dark:text-slate-600 text-sm">Loading featured project...</p>
+                  </div>
                 </div>
-              </div>
+              ) : featuredProject ? (
+                <motion.a
+                  href={featuredProject.html_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  whileHover={{ scale: 1.02 }}
+                  className="block"
+                >
+                  <div className="bg-gradient-to-br from-slate-900 dark:from-slate-100 to-slate-950 dark:to-slate-50 aspect-video rounded border border-slate-800 dark:border-slate-200 hover:border-amber-500 dark:hover:border-amber-400 transition-all p-8 flex flex-col justify-between cursor-pointer group overflow-hidden relative">
+                    {/* Accent line */}
+                    <div className="absolute top-0 left-0 w-1 h-12 bg-gradient-to-b from-amber-500 to-orange-500 group-hover:h-full transition-all duration-500"></div>
+
+                    {/* Content */}
+                    <div className="pl-4">
+                      <p className="text-xs uppercase tracking-widest text-slate-400 dark:text-slate-600 font-semibold mb-3">
+                        {featuredProject.language || 'Project'} • Featured
+                      </p>
+                      <h3 className="text-2xl font-bold mb-2 group-hover:text-gradient transition-colors text-white dark:text-black">
+                        {featuredProject.name}
+                      </h3>
+                      <p className="text-sm text-slate-300 dark:text-slate-700 line-clamp-2 italic font-light">
+                        {featuredProject.description || 'No description available'}
+                      </p>
+                    </div>
+
+                    {/* Footer */}
+                    <div className="flex items-center justify-between text-sm text-slate-300 dark:text-slate-700 pl-4 pt-4 border-t border-slate-800 dark:border-slate-200">
+                      <div className="flex gap-4">
+                        <span className="flex items-center gap-1 font-semibold">
+                          <Star size={14} />
+                          {featuredProject.stargazers_count}
+                        </span>
+                        <span className="flex items-center gap-1 font-semibold">
+                          <Eye size={14} />
+                          {featuredProject.watchers_count}
+                        </span>
+                      </div>
+                      <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                    </div>
+                  </div>
+                </motion.a>
+              ) : (
+                <div className="bg-gradient-to-br from-slate-900 dark:from-slate-100 to-slate-950 dark:to-slate-50 aspect-video rounded border border-slate-800 dark:border-slate-200 flex items-center justify-center">
+                  <div className="text-center">
+                    <div className="text-5xl mb-3">🎮</div>
+                    <p className="text-slate-400 dark:text-slate-600 text-sm">Featured work unavailable</p>
+                  </div>
+                </div>
+              )}
             </motion.div>
           </div>
         </div>
@@ -189,7 +247,7 @@ export default function Home() {
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold italic">
               Featured <span className="text-gradient">Projects</span>
             </h2>
-            <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl italic font-light">
+            <p className="text-lg text-slate-400 dark:text-slate-600 max-w-2xl italic font-light">
               A selection of my most recent and impactful game development work
             </p>
           </motion.div>
@@ -214,25 +272,25 @@ export default function Home() {
                   className="group cursor-pointer"
                 >
                   {/* Project Card */}
-                  <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 hover:border-amber-500 dark:hover:border-amber-400 transition-all duration-300 aspect-square flex flex-col justify-between p-6 relative overflow-hidden">
+                  <div className="bg-slate-900/50 dark:bg-slate-50 border border-slate-800 dark:border-slate-200 hover:border-amber-500 dark:hover:border-amber-400 transition-all duration-300 aspect-square flex flex-col justify-between p-6 relative overflow-hidden">
                     {/* Accent line */}
                     <div className="absolute top-0 left-0 w-1 h-12 bg-gradient-to-b from-amber-500 to-orange-500 group-hover:h-full transition-all duration-500"></div>
 
                     {/* Content */}
                     <div className="pl-4">
-                      <p className="text-xs uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-3">
+                      <p className="text-xs uppercase tracking-widest text-slate-400 dark:text-slate-600 mb-3">
                         {project.language || 'Project'}
                       </p>
-                      <h3 className="text-xl font-bold mb-2 group-hover:text-gradient transition-colors">
+                      <h3 className="text-xl font-bold mb-2 group-hover:text-gradient transition-colors text-white dark:text-black">
                         {project.name}
                       </h3>
-                      <p className="text-sm text-slate-600 dark:text-slate-400 line-clamp-2 italic font-light">
+                      <p className="text-sm text-slate-300 dark:text-slate-700 line-clamp-2 italic font-light">
                         {project.description || 'No description available'}
                       </p>
                     </div>
 
                     {/* Footer */}
-                    <div className="flex items-center justify-between text-sm text-slate-600 dark:text-slate-400 pl-4 pt-4 border-t border-slate-200 dark:border-slate-800">
+                    <div className="flex items-center justify-between text-sm text-slate-300 dark:text-slate-700 pl-4 pt-4 border-t border-slate-800 dark:border-slate-200">
                       <div className="flex gap-3">
                         <span className="flex items-center gap-1">
                           <Star size={14} />
@@ -265,7 +323,7 @@ export default function Home() {
           >
             <a
               href="/portfolio/projects/"
-              className="inline-flex items-center gap-2 text-lg font-semibold text-black dark:text-white hover:text-gradient transition-colors group"
+              className="inline-flex items-center gap-2 text-lg font-semibold text-white dark:text-black hover:text-gradient transition-colors group"
             >
               View All Projects <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
             </a>

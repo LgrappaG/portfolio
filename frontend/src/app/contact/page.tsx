@@ -22,9 +22,9 @@ export default function Contact() {
   };
 
   return (
-    <div className="min-h-screen bg-transparent text-black dark:text-white">
+    <div className="min-h-screen bg-transparent text-white dark:text-black">
       {/* Hero Section */}
-      <section className="py-24 md:py-32 border-b border-slate-200 dark:border-slate-800">
+      <section className="py-24 md:py-32 border-b border-slate-800 dark:border-slate-200">
         <div className="container-max container-px">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-16 items-center">
             {/* Left - Content */}
@@ -39,7 +39,7 @@ export default function Contact() {
               <h1 className="text-5xl md:text-7xl font-black italic mb-6 leading-tight">
                 Get In Touch
               </h1>
-              <p className="text-xl md:text-2xl text-slate-700 dark:text-slate-300 leading-relaxed font-light max-w-2xl">
+              <p className="text-xl md:text-2xl text-slate-300 dark:text-slate-700 leading-relaxed font-light max-w-2xl">
                 Have a question about a game project, or want to collaborate? Let's connect and bring your ideas to life
               </p>
             </motion.div>
@@ -76,7 +76,7 @@ export default function Contact() {
               className="space-y-6"
             >
               {/* Email */}
-              <div className="bg-slate-50 dark:bg-slate-900/50 border-2 border-slate-200 dark:border-slate-800 hover:border-amber-500 dark:hover:border-amber-400 transition-colors p-8">
+              <div className="bg-slate-900/50 dark:bg-slate-50 border-2 border-slate-800 dark:border-slate-200 hover:border-amber-500 dark:hover:border-amber-400 transition-colors p-8">
                 <div className="flex items-center gap-3 mb-4">
                   <Mail size={24} />
                   <h3 className="text-xl font-black">Email</h3>
@@ -87,7 +87,7 @@ export default function Contact() {
               </div>
 
               {/* Social */}
-              <div className="bg-slate-50 dark:bg-slate-900/50 border-2 border-slate-200 dark:border-slate-800 hover:border-amber-500 dark:hover:border-amber-400 transition-colors p-8">
+              <div className="bg-slate-900/50 dark:bg-slate-50 border-2 border-slate-800 dark:border-slate-200 hover:border-amber-500 dark:hover:border-amber-400 transition-colors p-8">
                 <h3 className="text-xl font-black mb-4">Social Links</h3>
                 <div className="space-y-3">
                   <a href="https://github.com/LgrappaG" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-amber-600 dark:text-amber-400 hover:underline font-semibold">
@@ -100,10 +100,10 @@ export default function Contact() {
               </div>
 
               {/* Availability */}
-              <div className="bg-slate-50 dark:bg-slate-900/50 border-2 border-slate-200 dark:border-slate-800 hover:border-amber-500 dark:hover:border-amber-400 transition-colors p-8">
+              <div className="bg-slate-900/50 dark:bg-slate-50 border-2 border-slate-800 dark:border-slate-200 hover:border-amber-500 dark:hover:border-amber-400 transition-colors p-8">
                 <h3 className="text-xl font-black mb-3">Availability</h3>
-                <p className="text-slate-700 dark:text-slate-300">Remote / Worldwide</p>
-                <p className="text-sm text-slate-600 dark:text-slate-400 mt-3 italic">Typically respond within 24-48 hours</p>
+                <p className="text-slate-300 dark:text-slate-700">Remote / Worldwide</p>
+                <p className="text-sm text-slate-400 dark:text-slate-600 mt-3 italic">Typically respond within 24-48 hours</p>
               </div>
             </motion.div>
 
@@ -115,7 +115,7 @@ export default function Contact() {
               viewport={{ once: true }}
               className="lg:col-span-2"
             >
-              <div className="bg-slate-50 dark:bg-slate-900/50 border-2 border-slate-200 dark:border-slate-800 p-8 md:p-12">
+              <div className="bg-slate-900/50 dark:bg-slate-50 border-2 border-slate-800 dark:border-slate-200 p-8 md:p-12">
                 <form onSubmit={handleSubmit} className="space-y-6">
                   {/* Name */}
                   <div>
@@ -126,7 +126,7 @@ export default function Contact() {
                       value={formData.name}
                       onChange={handleChange}
                       required
-                      className="w-full px-4 py-3 bg-white dark:bg-black border-2 border-slate-200 dark:border-slate-700 hover:border-amber-500 dark:hover:border-amber-400 focus:border-amber-500 dark:focus:border-amber-400 transition-colors outline-none"
+                      className="w-full px-4 py-3 bg-black dark:bg-white border-2 border-slate-800 dark:border-slate-200 hover:border-amber-500 dark:hover:border-amber-400 focus:border-amber-500 dark:focus:border-amber-400 transition-colors outline-none text-white dark:text-black"
                       placeholder="Your name"
                     />
                   </div>
@@ -140,7 +140,7 @@ export default function Contact() {
                       value={formData.email}
                       onChange={handleChange}
                       required
-                      className="w-full px-4 py-3 bg-white dark:bg-black border-2 border-slate-200 dark:border-slate-700 hover:border-amber-500 dark:hover:border-amber-400 focus:border-amber-500 dark:focus:border-amber-400 transition-colors outline-none"
+                      className="w-full px-4 py-3 bg-black dark:bg-white border-2 border-slate-800 dark:border-slate-200 hover:border-amber-500 dark:hover:border-amber-400 focus:border-amber-500 dark:focus:border-amber-400 transition-colors outline-none text-white dark:text-black"
                       placeholder="your@email.com"
                     />
                   </div>
@@ -154,7 +154,7 @@ export default function Contact() {
                       value={formData.subject}
                       onChange={handleChange}
                       required
-                      className="w-full px-4 py-3 bg-white dark:bg-black border-2 border-slate-200 dark:border-slate-700 hover:border-amber-500 dark:hover:border-amber-400 focus:border-amber-500 dark:focus:border-amber-400 transition-colors outline-none"
+                      className="w-full px-4 py-3 bg-black dark:bg-white border-2 border-slate-800 dark:border-slate-200 hover:border-amber-500 dark:hover:border-amber-400 focus:border-amber-500 dark:focus:border-amber-400 transition-colors outline-none text-white dark:text-black"
                       placeholder="What's this about?"
                     />
                   </div>
@@ -168,7 +168,7 @@ export default function Contact() {
                       onChange={handleChange}
                       required
                       rows={6}
-                      className="w-full px-4 py-3 bg-white dark:bg-black border-2 border-slate-200 dark:border-slate-700 hover:border-amber-500 dark:hover:border-amber-400 focus:border-amber-500 dark:focus:border-amber-400 transition-colors outline-none resize-none"
+                      className="w-full px-4 py-3 bg-black dark:bg-white border-2 border-slate-800 dark:border-slate-200 hover:border-amber-500 dark:hover:border-amber-400 focus:border-amber-500 dark:focus:border-amber-400 transition-colors outline-none resize-none text-white dark:text-black"
                       placeholder="Your message here..."
                     />
                   </div>
@@ -176,7 +176,7 @@ export default function Contact() {
                   {/* Submit Button */}
                   <button
                     type="submit"
-                    className="w-full px-6 py-4 bg-black dark:bg-white text-white dark:text-black font-black uppercase tracking-widest hover:shadow-lg transition-all"
+                    className="w-full px-6 py-4 bg-white dark:bg-black text-black dark:text-white font-black uppercase tracking-widest hover:shadow-lg transition-all"
                   >
                     Send Message
                   </button>
@@ -232,10 +232,10 @@ export default function Contact() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.05 }}
                 viewport={{ once: true }}
-                className="bg-slate-50 dark:bg-slate-900/50 border-2 border-slate-200 dark:border-slate-800 hover:border-amber-500 dark:hover:border-amber-400 transition-colors p-6"
+                className="bg-slate-900/50 dark:bg-slate-50 border-2 border-slate-800 dark:border-slate-200 hover:border-amber-500 dark:hover:border-amber-400 transition-colors p-6"
               >
                 <h3 className="font-black text-amber-600 dark:text-amber-400 mb-3 text-lg">{faq.q}</h3>
-                <p className="text-slate-700 dark:text-slate-300 leading-relaxed">{faq.a}</p>
+                <p className="text-slate-300 dark:text-slate-700 leading-relaxed">{faq.a}</p>
               </motion.div>
             ))}
           </div>
@@ -253,7 +253,7 @@ export default function Contact() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
-            className="bg-black dark:bg-white text-white dark:text-black p-12 md:p-16 lg:p-20"
+            className="bg-black/50 dark:bg-white/30 text-white dark:text-black p-12 md:p-16 lg:p-20 backdrop-blur-sm"
           >
             <div className="max-w-2xl mx-auto text-center space-y-8">
               <h2 className="text-4xl md:text-5xl font-black italic">
