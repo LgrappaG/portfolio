@@ -11,7 +11,7 @@ export interface ContactFormData {
 export const contactAPI = {
   // Send contact form
   sendContactForm: async (data: ContactFormData) => {
-    const response = await apiClient.post<ApiResponse<null>>('/contact/send', data);
+    const response = await apiClient.post<ApiResponse<null>>('/api/contact', data);
     return response.data;
   },
 };
