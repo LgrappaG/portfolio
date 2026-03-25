@@ -14,7 +14,7 @@
   }
 
   body {
-    @apply bg-transparent text-slate-900 dark:text-slate-50 transition-colors duration-300;
+    @apply bg-slate-950 text-slate-900 dark:text-slate-50 transition-colors duration-300;
   }
 
   body::before {
@@ -26,11 +26,23 @@
     bottom: 0;
     background-image: url('/portfolio/images/Background.jpg');
     background-attachment: fixed;
-    background-position: 0 0;
+    background-position: center center;
     background-repeat: no-repeat;
-    background-size: 100% 100%;
-    filter: blur(40px) brightness(0.25) contrast(1.2) saturate(0.8);
-    opacity: 0.8;
+    background-size: cover;
+    filter: blur(18px) brightness(0.35) contrast(1.3) saturate(0.9);
+    opacity: 0.95;
+    z-index: -2;
+    pointer-events: none;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(15, 23, 42, 0.3);
     z-index: -1;
     pointer-events: none;
   }
