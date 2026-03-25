@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Github, Mail, Linkedin, ArrowRight } from 'lucide-react';
-import Image from 'next/image';
 
 export default function Contact() {
   const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
@@ -53,14 +52,10 @@ export default function Contact() {
               className="relative w-full aspect-video max-w-md mx-auto lg:mx-0"
             >
               <div className="relative w-full h-full rounded-lg overflow-hidden border-2 border-slate-300 dark:border-slate-700">
-                <Image
-                  src="/images/contact.png"
+                <img
+                  src="/portfolio/images/contact.png"
                   alt="Contact"
-                  width={600}
-                  height={400}
                   className="object-cover w-full h-full"
-                  priority
-                  unoptimized
                 />
               </div>
             </motion.div>

@@ -2,7 +2,6 @@
 
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
-import Image from 'next/image';
 
 export default function About() {
   const skills = [
@@ -83,14 +82,10 @@ export default function About() {
               <div className="relative w-full aspect-square max-w-sm">
                 {/* Image with Border */}
                 <div className="w-full h-full relative rounded-lg overflow-hidden border-2 border-slate-300 dark:border-slate-700">
-                  <Image
-                    src="/images/about.jpg"
+                  <img
+                    src="/portfolio/images/about.jpg"
                     alt="Profile"
-                    width={500}
-                    height={500}
                     className="object-cover w-full h-full"
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                    unoptimized
                   />
                 </div>
 

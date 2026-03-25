@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Star, Eye, ArrowRight } from 'lucide-react';
-import Image from 'next/image';
 
 interface GitHubRepo {
   id: number;
@@ -100,14 +99,10 @@ export default function Projects() {
               className="relative w-full aspect-video max-w-md mx-auto lg:mx-0"
             >
               <div className="relative w-full h-full rounded-lg overflow-hidden border-2 border-slate-300 dark:border-slate-700">
-                <Image
-                  src="/images/project.jpg"
+                <img
+                  src="/portfolio/images/project.jpg"
                   alt="Projects showcase"
-                  width={800}
-                  height={450}
                   className="object-cover w-full h-full"
-                  priority
-                  unoptimized
                 />
               </div>
             </motion.div>
