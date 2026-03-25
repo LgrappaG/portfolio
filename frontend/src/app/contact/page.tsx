@@ -56,10 +56,11 @@ export default function Contact() {
                 <Image
                   src="/images/contact.png"
                   alt="Contact"
-                  fill
-                  className="object-cover"
+                  width={600}
+                  height={400}
+                  className="object-cover w-full h-full"
                   priority
-                  sizes="(max-width: 768px) 100vw, 50vw"
+                  unoptimized
                 />
               </div>
             </motion.div>

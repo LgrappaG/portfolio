@@ -86,9 +86,11 @@ export default function About() {
                   <Image
                     src="/images/about.jpg"
                     alt="Profile"
-                    fill
-                    className="object-cover"
+                    width={500}
+                    height={500}
+                    className="object-cover w-full h-full"
                     sizes="(max-width: 768px) 100vw, 50vw"
+                    unoptimized
                   />
                 </div>
 
