@@ -33,8 +33,17 @@ export default function Home() {
 
         // Check for API errors
         if (!userRes.ok || !reposRes.ok) {
+          console.error('GitHub API error:', userRes.status, reposRes.status);
           throw new Error(`GitHub API error: ${userRes.status} ${reposRes.status}`);
         }
+
+        console.log('Fetched repos:', reposData.length, 'repos');
+        console.log('Raw repos:', reposData.map((r: GitHubRepo) => ({
+          name: r.name,
+          language: r.language,
+          description: r.description,
+          topics: r.topics
+        })));
 
         // Filter game dev related projects (C#, Unity, Godot keywords)
         const gameProjects = reposData
@@ -44,9 +53,15 @@ export default function Home() {
               repo.language === 'C++' ||
               (repo.description && (repo.description.toLowerCase().includes('game') || repo.description.toLowerCase().includes('unity'))) ||
               repo.topics?.some((t: string) => ['game', 'unity', 'gamedev', 'game-development', 'c-sharp'].includes(t.toLowerCase()));
+
+            if (isGameDev) {
+              console.log('✓ Matched:', repo.name, '| Lang:', repo.language, '| Desc:', repo.description?.substring(0, 40));
+            }
             return isGameDev;
           })
           .slice(0, 6);
+
+        console.log('Filtered game projects:', gameProjects.length);
 
         let totalStars = 0;
         reposData.forEach((repo: GitHubRepo) => {
@@ -59,7 +74,10 @@ export default function Home() {
           followers: userData.followers || 0
         });
 
-        setProjects(gameProjects);
+        // If no game dev projects found, show recent public repos as fallback
+        const projectsToShow = gameProjects.length > 0 ? gameProjects : reposData.slice(0, 6);
+        console.log('Projects to display:', projectsToShow.length);
+        setProjects(projectsToShow);
       } catch (error) {
         console.error('Failed to fetch GitHub data:', error);
         // Keep previous state on error (don't clear projects)
