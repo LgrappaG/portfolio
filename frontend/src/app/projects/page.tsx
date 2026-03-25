@@ -42,8 +42,7 @@ export default function Projects() {
               (repo.description && (repo.description.toLowerCase().includes('game') || repo.description.toLowerCase().includes('unity'))) ||
               repo.topics?.some((t: string) => ['game', 'unity', 'gamedev', 'game-development', 'c-sharp'].includes(t.toLowerCase()));
             return isGameDev;
-          })
-          .slice(0, 12);
+          });
 
         let totalStars = 0;
         reposData.forEach((repo: GitHubRepo) => {
@@ -56,7 +55,7 @@ export default function Projects() {
           followers: userData.followers || 0
         });
 
-        const projectsToShow = gameProjects.length > 0 ? gameProjects : reposData.slice(0, 12);
+        const projectsToShow = gameProjects.length > 0 ? gameProjects : reposData;
         setProjects(projectsToShow);
       } catch (error) {
         console.error('Failed to fetch GitHub data:', error);
