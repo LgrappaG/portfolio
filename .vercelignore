@@ -1,0 +1,7 @@
+backend/src
+backend/dist
+backend/prisma
+backend/tsconfig.json
+backend/.env*
+frontend
+
