@@ -29,8 +29,8 @@
     background-position: 0 0;
     background-repeat: no-repeat;
     background-size: 100% 100%;
-    filter: blur(40px);
-    opacity: 0.15;
+    filter: blur(40px) brightness(0.25) contrast(1.2) saturate(0.8);
+    opacity: 0.8;
     z-index: -1;
     pointer-events: none;
   }

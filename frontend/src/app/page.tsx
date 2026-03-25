@@ -92,7 +92,7 @@ export default function Home() {
                   Welcome to my portfolio
                 </p>
                 <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold italic text-black dark:text-white leading-tight">
-                  Game Developer & Full Stack Engineer
+                  Game Developer & Full Stack Developer
                 </h1>
               </div>
 

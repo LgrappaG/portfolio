@@ -58,7 +58,7 @@ export default function About() {
               About
             </p>
             <h1 className="text-5xl md:text-7xl font-black italic mb-6 leading-tight">
-              Game Developer & Full Stack Engineer
+              Game Developer & Full Stack Developer
             </h1>
             <p className="text-xl md:text-2xl text-slate-700 dark:text-slate-300 leading-relaxed font-light max-w-2xl">
               Passionate about creating immersive gameplay experiences and engaging interactive worlds with modern technologies
