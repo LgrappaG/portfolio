@@ -69,9 +69,9 @@ export default function Projects() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-transparent text-white dark:text-black">
+    <div className="min-h-screen bg-transparent text-black dark:text-white">
       {/* Hero Section */}
-      <section className="py-24 md:py-32 border-b border-slate-800 dark:border-slate-200">
+      <section className="py-24 md:py-32 border-b border-slate-200 dark:border-slate-800">
         <div className="container-max container-px">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-16 items-center">
             {/* Left - Content */}
@@ -86,7 +86,7 @@ export default function Projects() {
               <h1 className="text-5xl md:text-7xl font-black italic mb-6 leading-tight">
                 All Projects & Works
               </h1>
-              <p className="text-xl md:text-2xl text-slate-300 dark:text-slate-700 leading-relaxed font-light max-w-2xl">
+              <p className="text-xl md:text-2xl text-slate-700 dark:text-slate-300 leading-relaxed font-light max-w-2xl">
                 Complete collection of game development projects featuring C#, Unity, and innovative gameplay mechanics
               </p>
             </motion.div>
@@ -132,11 +132,11 @@ export default function Projects() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.1 }}
                 viewport={{ once: true }}
-                className="bg-slate-900/50 dark:bg-slate-50 border-2 border-slate-800 dark:border-slate-200 p-6 text-center"
+                className="bg-slate-50 dark:bg-slate-900/50 border-2 border-slate-200 dark:border-slate-800 p-6 text-center"
               >
                 <p className="text-3xl mb-2">{stat.icon}</p>
                 <p className="text-2xl md:text-3xl font-black text-gradient mb-1">{stat.value}</p>
-                <p className="text-sm text-slate-400 dark:text-slate-600 uppercase tracking-widest font-semibold">{stat.label}</p>
+                <p className="text-sm text-slate-600 dark:text-slate-400 uppercase tracking-widest font-semibold">{stat.label}</p>
               </motion.div>
             ))}
           </motion.div>
@@ -161,19 +161,19 @@ export default function Projects() {
                   className="group cursor-pointer"
                 >
                   {/* Project Card */}
-                  <div className="bg-slate-900/50 dark:bg-slate-50 border-2 border-slate-800 dark:border-slate-200 hover:border-amber-500 dark:hover:border-amber-400 transition-all duration-300 h-full flex flex-col justify-between p-6 relative overflow-hidden">
+                  <div className="bg-slate-50 dark:bg-slate-900/50 border-2 border-slate-200 dark:border-slate-800 hover:border-amber-500 dark:hover:border-amber-400 transition-all duration-300 h-full flex flex-col justify-between p-6 relative overflow-hidden">
                     {/* Accent line */}
                     <div className="absolute top-0 left-0 w-1 h-12 bg-gradient-to-b from-amber-500 to-orange-500 group-hover:h-full transition-all duration-500"></div>
 
                     {/* Content */}
                     <div className="pl-4">
-                      <p className="text-xs uppercase tracking-widest text-slate-400 dark:text-slate-600 font-semibold mb-3">
+                      <p className="text-xs uppercase tracking-widest text-slate-500 dark:text-slate-400 font-semibold mb-3">
                         {project.language || 'Project'}
                       </p>
-                      <h3 className="text-lg md:text-xl font-black mb-3 group-hover:text-gradient transition-colors text-white dark:text-black">
+                      <h3 className="text-lg md:text-xl font-black mb-3 group-hover:text-gradient transition-colors">
                         {project.name}
                       </h3>
-                      <p className="text-sm text-slate-300 dark:text-slate-700 line-clamp-3 italic font-light">
+                      <p className="text-sm text-slate-600 dark:text-slate-400 line-clamp-3 italic font-light">
                         {project.description || 'No description available'}
                       </p>
                     </div>
@@ -182,7 +182,7 @@ export default function Projects() {
                     {project.topics && project.topics.length > 0 && (
                       <div className="flex flex-wrap gap-2 my-4 pl-4">
                         {project.topics.slice(0, 2).map((topic) => (
-                          <span key={topic} className="px-2 py-1 bg-slate-800 dark:bg-slate-200 text-xs font-semibold text-slate-300 dark:text-slate-700 uppercase tracking-wide">
+                          <span key={topic} className="px-2 py-1 bg-slate-200 dark:bg-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wide">
                             {topic}
                           </span>
                         ))}
@@ -190,7 +190,7 @@ export default function Projects() {
                     )}
 
                     {/* Footer */}
-                    <div className="flex items-center justify-between text-sm text-slate-300 dark:text-slate-700 pl-4 pt-4 border-t border-slate-800 dark:border-slate-200">
+                    <div className="flex items-center justify-between text-sm text-slate-600 dark:text-slate-400 pl-4 pt-4 border-t border-slate-200 dark:border-slate-800">
                       <div className="flex gap-4">
                         <span className="flex items-center gap-1 font-semibold">
                           <Star size={14} />

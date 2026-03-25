@@ -44,9 +44,9 @@ export default function About() {
   ];
 
   return (
-    <div className="min-h-screen bg-transparent text-white dark:text-black">
+    <div className="min-h-screen bg-transparent text-black dark:text-white">
       {/* Hero Section */}
-      <section className="py-24 md:py-32 border-b border-slate-800 dark:border-slate-200">
+      <section className="py-24 md:py-32 border-b border-slate-200 dark:border-slate-800">
         <div className="container-max container-px">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -60,7 +60,7 @@ export default function About() {
             <h1 className="text-5xl md:text-7xl font-black italic mb-6 leading-tight">
               Game Developer & Full Stack Developer
             </h1>
-            <p className="text-xl md:text-2xl text-slate-300 dark:text-slate-700 leading-relaxed font-light max-w-2xl">
+            <p className="text-xl md:text-2xl text-slate-700 dark:text-slate-300 leading-relaxed font-light max-w-2xl">
               Passionate about creating immersive gameplay experiences and engaging interactive worlds with modern technologies
             </p>
           </motion.div>
@@ -68,7 +68,7 @@ export default function About() {
       </section>
 
       {/* Bio Section */}
-      <section className="py-24 md:py-32 border-b border-slate-800 dark:border-slate-200">
+      <section className="py-24 md:py-32 border-b border-slate-200 dark:border-slate-800">
         <div className="container-max container-px">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-16">
             {/* Left - Profile Image */}
@@ -81,7 +81,7 @@ export default function About() {
             >
               <div className="relative w-full aspect-square max-w-sm">
                 {/* Image with Border */}
-                <div className="w-full h-full relative rounded-lg overflow-hidden border-2 border-slate-700 dark:border-slate-300">
+                <div className="w-full h-full relative rounded-lg overflow-hidden border-2 border-slate-300 dark:border-slate-700">
                   <img
                     src="/portfolio/images/about.jpg"
                     alt="Profile"
@@ -102,7 +102,7 @@ export default function About() {
               viewport={{ once: true }}
             >
               <h2 className="text-3xl md:text-4xl font-black italic mb-8">Who I Am</h2>
-              <div className="space-y-6 text-lg leading-relaxed text-slate-300 dark:text-slate-700">
+              <div className="space-y-6 text-lg leading-relaxed text-slate-700 dark:text-slate-300">
                 <p>
                   I'm a passionate game developer specializing in Unity and C# with 5+ years of experience creating games and interactive experiences. I focus on gameplay mechanics, physics systems, and creating engaging player experiences.
                 </p>
@@ -119,7 +119,7 @@ export default function About() {
       </section>
 
       {/* Skills Section */}
-      <section className="py-24 md:py-32 border-b border-slate-800 dark:border-slate-200">
+      <section className="py-24 md:py-32 border-b border-slate-200 dark:border-slate-800">
         <div className="container-max container-px">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -139,13 +139,13 @@ export default function About() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.1 }}
                 viewport={{ once: true }}
-                className="bg-slate-900/50 dark:bg-slate-50 border-2 border-slate-800 dark:border-slate-200 p-8 hover:border-amber-500 dark:hover:border-amber-400 transition-colors"
+                className="bg-slate-50 dark:bg-slate-900/50 border-2 border-slate-200 dark:border-slate-800 p-8 hover:border-amber-500 dark:hover:border-amber-400 transition-colors"
               >
                 <p className="text-4xl mb-4">{skillGroup.icon}</p>
                 <h3 className="text-xl font-black mb-6 italic">{skillGroup.category}</h3>
                 <ul className="space-y-3">
                   {skillGroup.items.map((item, j) => (
-                    <li key={j} className="flex items-start gap-3 text-slate-300 dark:text-slate-700">
+                    <li key={j} className="flex items-start gap-3 text-slate-700 dark:text-slate-300">
                       <span className="text-amber-600 dark:text-amber-400 font-black mt-1">•</span>
                       <span>{item}</span>
                     </li>
@@ -158,7 +158,7 @@ export default function About() {
       </section>
 
       {/* Experience Section */}
-      <section className="py-24 md:py-32 border-b border-slate-800 dark:border-slate-200">
+      <section className="py-24 md:py-32 border-b border-slate-200 dark:border-slate-800">
         <div className="container-max container-px">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -178,16 +178,16 @@ export default function About() {
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.1 }}
                 viewport={{ once: true }}
-                className="bg-slate-900/50 dark:bg-slate-50 border-2 border-slate-800 dark:border-slate-200 hover:border-amber-500 dark:hover:border-amber-400 transition-colors p-8"
+                className="bg-slate-50 dark:bg-slate-900/50 border-2 border-slate-200 dark:border-slate-800 hover:border-amber-500 dark:hover:border-amber-400 transition-colors p-8"
               >
                 <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
                   <div>
                     <h3 className="text-xl md:text-2xl font-black">{exp.role}</h3>
                     <p className="text-lg font-semibold text-amber-600 dark:text-amber-400 mt-2">{exp.company}</p>
                   </div>
-                  <span className="text-sm font-semibold text-slate-400 dark:text-slate-600 uppercase tracking-widest">{exp.period}</span>
+                  <span className="text-sm font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-widest">{exp.period}</span>
                 </div>
-                <p className="text-slate-300 dark:text-slate-700 leading-relaxed">{exp.desc}</p>
+                <p className="text-slate-700 dark:text-slate-300 leading-relaxed">{exp.desc}</p>
               </motion.div>
             ))}
           </div>
