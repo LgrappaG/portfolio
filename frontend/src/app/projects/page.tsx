@@ -124,7 +124,7 @@ export default function Projects() {
         className="mb-16 md:mb-24"
       >
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {loading && !projects.length ? (
+          {loading ? (
             <div className="col-span-full text-center p-8">
               <p className="text-slate-500">Loading projects...</p>
             </div>
