@@ -53,7 +53,7 @@ export default function Contact() {
             >
               <div className="relative w-full h-full rounded-lg overflow-hidden border-2 border-slate-300 dark:border-slate-700">
                 <img
-                  src="/portfolio/images/contact.png"
+                  src="/images/contact.png"
                   alt="Contact"
                   className="object-cover w-full h-full"
                 />

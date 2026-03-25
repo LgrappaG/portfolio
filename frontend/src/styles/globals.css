@@ -15,11 +15,6 @@
 
   body {
     @apply bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-50 transition-colors duration-300;
-    background-image: url('/images/Background.jpg');
-    background-attachment: fixed;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
   }
 
   body::before {
@@ -36,7 +31,7 @@
     background-size: cover;
     filter: blur(40px);
     opacity: 0.15;
-    z-index: -10;
+    z-index: -1;
     pointer-events: none;
   }
 

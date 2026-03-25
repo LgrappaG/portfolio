@@ -19,9 +19,6 @@ export function ClientLayout({ children }: ClientLayoutProps) {
     <>
       {showSplash && <SplashScreen onComplete={handleSplashComplete} />}
       <div className="flex flex-col min-h-screen relative">
-        {/* Background decorative element */}
-        <div className="fixed inset-0 z-0 pointer-events-none" />
-
         {/* Main content wrapper */}
         <div className="relative z-10">
           {/* Header */}

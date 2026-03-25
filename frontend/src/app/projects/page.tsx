@@ -100,7 +100,7 @@ export default function Projects() {
             >
               <div className="relative w-full h-full rounded-lg overflow-hidden border-2 border-slate-300 dark:border-slate-700">
                 <img
-                  src="/portfolio/images/project.jpg"
+                  src="/images/project.jpg"
                   alt="Projects showcase"
                   className="object-cover w-full h-full"
                 />

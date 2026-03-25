@@ -83,7 +83,7 @@ export default function About() {
                 {/* Image with Border */}
                 <div className="w-full h-full relative rounded-lg overflow-hidden border-2 border-slate-300 dark:border-slate-700">
                   <img
-                    src="/portfolio/images/about.jpg"
+                    src="/images/about.jpg"
                     alt="Profile"
                     className="object-cover w-full h-full"
                   />
