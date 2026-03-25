@@ -71,11 +71,41 @@ export default function About() {
       <section className="py-24 md:py-32 border-b border-slate-200 dark:border-slate-800">
         <div className="container-max container-px">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-16">
-            {/* Left */}
+            {/* Left - Profile Image */}
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+              className="flex items-center justify-center"
+            >
+              <div className="relative w-full aspect-square max-w-sm">
+                {/* Image Placeholder with Border */}
+                <div className="w-full h-full bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-900 border-2 border-slate-300 dark:border-slate-700 rounded-lg overflow-hidden flex items-center justify-center relative group">
+                  {/* SVG Placeholder */}
+                  <svg className="w-24 h-24 text-slate-400 dark:text-slate-600" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                  </svg>
+
+                  {/* Hover Effect */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-amber-500/10 to-orange-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+
+                  {/* Text Overlay */}
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/40 opacity-0 group-hover:opacity-100 transition-all duration-300 rounded-lg">
+                    <p className="text-white text-sm font-semibold text-center">Profile Image</p>
+                  </div>
+                </div>
+
+                {/* Decorative Border */}
+                <div className="absolute -inset-4 border border-dashed border-amber-500 dark:border-amber-400 rounded-lg opacity-30"></div>
+              </div>
+            </motion.div>
+
+            {/* Right - Content */}
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.1 }}
               viewport={{ once: true }}
             >
               <h2 className="text-3xl md:text-4xl font-black italic mb-8">Who I Am</h2>
@@ -90,35 +120,6 @@ export default function About() {
                   I also have frontend web development experience with React and TypeScript, but my primary focus is game development with C#, C++, and creating immersive gaming experiences using modern game engines.
                 </p>
               </div>
-            </motion.div>
-
-            {/* Right - Stats */}
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.1 }}
-              viewport={{ once: true }}
-              className="grid grid-cols-1 sm:grid-cols-2 gap-6"
-            >
-              {[
-                { label: 'Years Experience', value: '5+', icon: '🚀' },
-                { label: 'Games Shipped', value: '8+', icon: '🎮' },
-                { label: 'GitHub Stars', value: '250+', icon: '⭐' },
-                { label: 'Projects', value: '30+', icon: '📦' }
-              ].map((stat, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, y: 10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.1 }}
-                  viewport={{ once: true }}
-                  className="bg-slate-50 dark:bg-slate-900/50 border-2 border-slate-200 dark:border-slate-800 p-8"
-                >
-                  <p className="text-4xl mb-3">{stat.icon}</p>
-                  <p className="text-3xl md:text-4xl font-black mb-2 text-gradient">{stat.value}</p>
-                  <p className="text-sm font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wide">{stat.label}</p>
-                </motion.div>
-              ))}
             </motion.div>
           </div>
         </div>

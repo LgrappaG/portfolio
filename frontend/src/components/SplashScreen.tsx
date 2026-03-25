@@ -36,12 +36,12 @@ export const SplashScreen = ({ onComplete }: SplashScreenProps) => {
             className="drop-shadow-2xl"
             style={{ filter: 'drop-shadow(0 20px 40px rgba(255,255,255,0.2))' }}
           >
-            {/* Vertical line of L */}
+            {/* Vertical line of L - draws from BOTTOM to TOP */}
             <motion.line
               x1="30"
-              y1="20"
+              y1="140"
               x2="30"
-              y2="140"
+              y2="20"
               stroke="white"
               strokeWidth="8"
               strokeLinecap="round"
@@ -53,7 +53,7 @@ export const SplashScreen = ({ onComplete }: SplashScreenProps) => {
               }}
             />
 
-            {/* Horizontal line of L */}
+            {/* Horizontal line of L - left to right */}
             <motion.line
               x1="30"
               y1="140"
@@ -71,7 +71,7 @@ export const SplashScreen = ({ onComplete }: SplashScreenProps) => {
               }}
             />
 
-            {/* Fill animation - vertical */}
+            {/* Fill animation - vertical (bottom to top) */}
             <motion.rect
               x="22"
               y="20"
@@ -87,7 +87,7 @@ export const SplashScreen = ({ onComplete }: SplashScreenProps) => {
               }}
             />
 
-            {/* Fill animation - horizontal */}
+            {/* Fill animation - horizontal (left to right) */}
             <motion.rect
               x="30"
               y="132"
