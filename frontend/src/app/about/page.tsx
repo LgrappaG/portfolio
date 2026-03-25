@@ -1,150 +1,233 @@
+'use client';
+
+import { motion } from 'framer-motion';
+import { ArrowRight } from 'lucide-react';
+
 export default function About() {
+  const skills = [
+    {
+      category: 'Game Development',
+      icon: '🎮',
+      items: ['Unity (C#)', 'Godot', 'Game Physics', 'Gameplay Mechanics', '2D & 3D', 'Audio Integration']
+    },
+    {
+      category: 'Programming',
+      icon: '💻',
+      items: ['C# (Expert)', 'C++', 'TypeScript', 'Object-Oriented Design', 'Design Patterns', 'Git & Version Control']
+    },
+    {
+      category: 'Tools & Other',
+      icon: '🛠️',
+      items: ['React & Next.js', 'Blender (3D)', 'UI/UX Design', 'Level Design', 'Asset Management', 'Scripting']
+    }
+  ];
+
+  const experience = [
+    {
+      role: 'Senior Game Developer',
+      company: 'Independent Developer',
+      period: '2021 - Present',
+      desc: 'Creating commercial and indie games, focusing on gameplay mechanics and player experience'
+    },
+    {
+      role: 'Game Developer',
+      company: 'Game Studio',
+      period: '2020 - 2021',
+      desc: 'Developed games using Unity, implemented physics systems and gameplay mechanics'
+    },
+    {
+      role: 'Game Development Enthusiast',
+      company: 'Personal Projects',
+      period: '2019 - 2020',
+      desc: 'Started game development journey, built foundations in C# and game design'
+    }
+  ];
+
   return (
-    <div className="container-max container-px py-12 md:py-20">
-      {/* Header */}
-      <section className="mb-16 md:mb-24">
-        <h1 className="text-4xl md:text-6xl font-bold mb-4 text-gradient">About Me</h1>
-        <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl">
-          Game Developer & Software Engineer passionate about creating immersive gameplay experiences and engaging interactive worlds.
-        </p>
-      </section>
-
-      {/* Bio */}
-      <section className="mb-16 md:mb-24">
-        <div className="card-base p-8 border-2 border-transparent hover:border-blue-400/50 dark:hover:border-blue-500/50 transition-colors">
-          <h2 className="text-2xl md:text-3xl font-bold mb-4">Who I Am</h2>
-          <div className="space-y-4 text-slate-700 dark:text-slate-300">
-            <p>
-              I'm a passionate game developer specializing in Unity and C# with 5+ years of experience creating games and interactive experiences.
-              I focus on gameplay mechanics, physics systems, and creating engaging player experiences.
+    <div className="min-h-screen bg-white dark:bg-black text-black dark:text-white">
+      {/* Hero Section */}
+      <section className="py-24 md:py-32 border-b border-slate-200 dark:border-slate-800">
+        <div className="container-max container-px">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="max-w-3xl"
+          >
+            <p className="text-sm md:text-base tracking-widest text-amber-600 dark:text-amber-400 font-light uppercase mb-4">
+              About
             </p>
-            <p>
-              My game development journey started in 2019-2020, where I built foundations in game design and C# programming.
-              Since then, I've been developing games using Unity, creating everything from 2D platformers to 3D adventure games.
+            <h1 className="text-5xl md:text-7xl font-black italic mb-6 leading-tight">
+              Game Developer & Full Stack Engineer
+            </h1>
+            <p className="text-xl md:text-2xl text-slate-700 dark:text-slate-300 leading-relaxed font-light max-w-2xl">
+              Passionate about creating immersive gameplay experiences and engaging interactive worlds with modern technologies
             </p>
-            <p>
-              I also have frontend web development experience (React, TypeScript) from 2019-2020, but my primary focus is game development
-              with C#, C++, and creating immersive gaming experiences using modern game engines.
-            </p>
-          </div>
+          </motion.div>
         </div>
       </section>
 
-      {/* Skills */}
-      <section className="mb-16 md:mb-24">
-        <h2 className="text-3xl font-bold mb-8">Skills & Technologies</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {/* Game Development */}
-          <div className="card-base p-6 border-2 border-transparent hover:border-blue-400/50 dark:hover:border-blue-500/50 transition-colors">
-            <h3 className="text-xl font-bold mb-4">🎮 Game Development</h3>
-            <ul className="space-y-2 text-slate-700 dark:text-slate-300">
-              <li>• <strong>Unity</strong> (Primary)</li>
-              <li>• C# (Advanced)</li>
-              <li>• Game Physics</li>
-              <li>• Gameplay Mechanics</li>
-              <li>• 2D & 3D Development</li>
-              <li>• Audio Integration</li>
-            </ul>
-          </div>
-
-          {/* Programming */}
-          <div className="card-base p-6 border-2 border-transparent hover:border-blue-400/50 dark:hover:border-blue-500/50 transition-colors">
-            <h3 className="text-xl font-bold mb-4">💻 Programming</h3>
-            <ul className="space-y-2 text-slate-700 dark:text-slate-300">
-              <li>• C# (Expert)</li>
-              <li>• C++ (Intermediate)</li>
-              <li>• TypeScript</li>
-              <li>• Object-Oriented Design</li>
-              <li>• Design Patterns</li>
-              <li>• Git & Version Control</li>
-            </ul>
-          </div>
-
-          {/* Tools & Other */}
-          <div className="card-base p-6 border-2 border-transparent hover:border-blue-400/50 dark:hover:border-blue-500/50 transition-colors">
-            <h3 className="text-xl font-bold mb-4">🛠️ Tools & Other</h3>
-            <ul className="space-y-2 text-slate-700 dark:text-slate-300">
-              <li>• React & Next.js</li>
-              <li>• Blender (3D)</li>
-              <li>• Godot Engine</li>
-              <li>• UI/UX Design</li>
-              <li>• Level Design</li>
-              <li>• Asset Management</li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      {/* Experience */}
-      <section className="mb-16 md:mb-24">
-        <h2 className="text-3xl font-bold mb-8">Experience</h2>
-        <div className="space-y-6">
-          {[
-            {
-              role: "Senior Game Developer",
-              company: "Independent Developer",
-              period: "2021 - Present",
-              desc: "Created multiple commercial and indie games, focusing on gameplay mechanics and player experience"
-            },
-            {
-              role: "Game Developer",
-              company: "Game Studio",
-              period: "2020 - 2021",
-              desc: "Developed games using Unity, implemented physics systems and gameplay mechanics"
-            },
-            {
-              role: "Game Development Enthusiast",
-              company: "Personal Projects",
-              period: "2019 - 2020",
-              desc: "Started game development journey, built foundations in C# and game design"
-            },
-            {
-              role: "Frontend Developer",
-              company: "Web Projects",
-              period: "2019 - 2020",
-              desc: "Limited frontend experience with React and TypeScript"
-            }
-          ].map((exp, i) => (
-            <div key={i} className="card-base p-6 border-l-4 border-blue-600 hover:border-blue-400/50 dark:hover:border-blue-500/50 transition-colors">
-              <div className="flex justify-between items-start mb-2">
-                <h3 className="text-xl font-bold">{exp.role}</h3>
-                <span className="text-sm text-slate-500">{exp.period}</span>
+      {/* Bio Section */}
+      <section className="py-24 md:py-32 border-b border-slate-200 dark:border-slate-800">
+        <div className="container-max container-px">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-16">
+            {/* Left */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+            >
+              <h2 className="text-3xl md:text-4xl font-black italic mb-8">Who I Am</h2>
+              <div className="space-y-6 text-lg leading-relaxed text-slate-700 dark:text-slate-300">
+                <p>
+                  I'm a passionate game developer specializing in Unity and C# with 5+ years of experience creating games and interactive experiences. I focus on gameplay mechanics, physics systems, and creating engaging player experiences.
+                </p>
+                <p>
+                  My game development journey started in 2019-2020, where I built foundations in game design and C# programming. Since then, I've been developing games using Unity, creating everything from 2D platformers to 3D adventure games.
+                </p>
+                <p>
+                  I also have frontend web development experience with React and TypeScript, but my primary focus is game development with C#, C++, and creating immersive gaming experiences using modern game engines.
+                </p>
               </div>
-              <p className="font-semibold text-blue-600 mb-2">{exp.company}</p>
-              <p className="text-slate-700 dark:text-slate-300">{exp.desc}</p>
-            </div>
-          ))}
+            </motion.div>
+
+            {/* Right - Stats */}
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.1 }}
+              viewport={{ once: true }}
+              className="grid grid-cols-1 sm:grid-cols-2 gap-6"
+            >
+              {[
+                { label: 'Years Experience', value: '5+', icon: '🚀' },
+                { label: 'Games Shipped', value: '8+', icon: '🎮' },
+                { label: 'GitHub Stars', value: '250+', icon: '⭐' },
+                { label: 'Projects', value: '30+', icon: '📦' }
+              ].map((stat, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.1 }}
+                  viewport={{ once: true }}
+                  className="bg-slate-50 dark:bg-slate-900/50 border-2 border-slate-200 dark:border-slate-800 p-8"
+                >
+                  <p className="text-4xl mb-3">{stat.icon}</p>
+                  <p className="text-3xl md:text-4xl font-black mb-2 text-gradient">{stat.value}</p>
+                  <p className="text-sm font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wide">{stat.label}</p>
+                </motion.div>
+              ))}
+            </motion.div>
+          </div>
         </div>
       </section>
 
-      {/* Achievements */}
-      <section className="mb-16 md:mb-24">
-        <h2 className="text-2xl md:text-3xl font-bold mb-8">Achievements</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {[
-            { label: "Games Shipped", value: "8+", icon: "🎮" },
-            { label: "GitHub Stars", value: "250+", icon: "⭐" },
-            { label: "Years Experience", value: "5+", icon: "🚀" }
-          ].map((stat, i) => (
-            <div key={i} className="card-base p-8 text-center border-2 border-transparent hover:border-blue-400/50 dark:hover:border-blue-500/50 transition-colors hover:scale-105 duration-300">
-              <div className="text-5xl mb-4">{stat.icon}</div>
-              <div className="text-4xl md:text-5xl font-bold text-gradient mb-3">{stat.value}</div>
-              <p className="text-slate-700 dark:text-slate-300 text-lg font-medium">{stat.label}</p>
-            </div>
-          ))}
+      {/* Skills Section */}
+      <section className="py-24 md:py-32 border-b border-slate-200 dark:border-slate-800">
+        <div className="container-max container-px">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="mb-16"
+          >
+            <h2 className="text-3xl md:text-4xl font-black italic">Skills & Technologies</h2>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {skills.map((skillGroup, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.1 }}
+                viewport={{ once: true }}
+                className="bg-slate-50 dark:bg-slate-900/50 border-2 border-slate-200 dark:border-slate-800 p-8 hover:border-amber-500 dark:hover:border-amber-400 transition-colors"
+              >
+                <p className="text-4xl mb-4">{skillGroup.icon}</p>
+                <h3 className="text-xl font-black mb-6 italic">{skillGroup.category}</h3>
+                <ul className="space-y-3">
+                  {skillGroup.items.map((item, j) => (
+                    <li key={j} className="flex items-start gap-3 text-slate-700 dark:text-slate-300">
+                      <span className="text-amber-600 dark:text-amber-400 font-black mt-1">•</span>
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-12 text-center text-white">
-        <h2 className="text-3xl font-bold mb-4">Let's Create Something Amazing</h2>
-        <p className="text-lg mb-8 opacity-90">Have a game project or collaboration idea? Let's connect!</p>
-        <a
-          href="/portfolio/contact/"
-          className="inline-block px-8 py-3 bg-white text-blue-600 font-semibold rounded-lg hover:bg-slate-100 transition-colors"
-        >
-          Get In Touch
-        </a>
+      {/* Experience Section */}
+      <section className="py-24 md:py-32 border-b border-slate-200 dark:border-slate-800">
+        <div className="container-max container-px">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="mb-16"
+          >
+            <h2 className="text-3xl md:text-4xl font-black italic">Experience</h2>
+          </motion.div>
+
+          <div className="space-y-6">
+            {experience.map((exp, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ delay: i * 0.1 }}
+                viewport={{ once: true }}
+                className="bg-slate-50 dark:bg-slate-900/50 border-2 border-slate-200 dark:border-slate-800 hover:border-amber-500 dark:hover:border-amber-400 transition-colors p-8"
+              >
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
+                  <div>
+                    <h3 className="text-xl md:text-2xl font-black">{exp.role}</h3>
+                    <p className="text-lg font-semibold text-amber-600 dark:text-amber-400 mt-2">{exp.company}</p>
+                  </div>
+                  <span className="text-sm font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-widest">{exp.period}</span>
+                </div>
+                <p className="text-slate-700 dark:text-slate-300 leading-relaxed">{exp.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-24 md:py-32">
+        <div className="container-max container-px">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="bg-black dark:bg-white text-white dark:text-black p-12 md:p-16 lg:p-20"
+          >
+            <div className="max-w-2xl mx-auto text-center space-y-8">
+              <h2 className="text-4xl md:text-5xl font-black italic">
+                Let's Create Something Amazing
+              </h2>
+              <p className="text-lg md:text-xl text-gray-300 dark:text-gray-700 italic font-light">
+                Have a game project or collaboration idea? Let's connect and bring your vision to life
+              </p>
+              <motion.a
+                href="/portfolio/contact/"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="inline-flex items-center gap-2 px-8 py-4 bg-white dark:bg-black text-black dark:text-white font-semibold hover:gap-3 transition-all"
+              >
+                Get In Touch <ArrowRight size={20} />
+              </motion.a>
+            </div>
+          </motion.div>
+        </div>
       </section>
     </div>
   );

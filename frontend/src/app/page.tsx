@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Github, Star, Eye } from 'lucide-react';
+import { Github, Star, Eye, ArrowRight } from 'lucide-react';
 
 interface GitHubRepo {
   id: number;
@@ -23,29 +23,17 @@ export default function Home() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Fetch user stats
         const userRes = await fetch('https://api.github.com/users/LgrappaG');
         const userData = await userRes.json();
 
-        // Fetch repositories
         const reposRes = await fetch('https://api.github.com/users/LgrappaG/repos?per_page=100&sort=stars');
         const reposData = await reposRes.json();
 
-        // Check for API errors
         if (!userRes.ok || !reposRes.ok) {
           console.error('GitHub API error:', userRes.status, reposRes.status);
           throw new Error(`GitHub API error: ${userRes.status} ${reposRes.status}`);
         }
 
-        console.log('Fetched repos:', reposData.length, 'repos');
-        console.log('Raw repos:', reposData.map((r: GitHubRepo) => ({
-          name: r.name,
-          language: r.language,
-          description: r.description,
-          topics: r.topics
-        })));
-
-        // Filter game dev related projects (C#, Unity, Godot keywords)
         const gameProjects = reposData
           .filter((repo: GitHubRepo) => {
             const isGameDev =
@@ -53,15 +41,9 @@ export default function Home() {
               repo.language === 'C++' ||
               (repo.description && (repo.description.toLowerCase().includes('game') || repo.description.toLowerCase().includes('unity'))) ||
               repo.topics?.some((t: string) => ['game', 'unity', 'gamedev', 'game-development', 'c-sharp'].includes(t.toLowerCase()));
-
-            if (isGameDev) {
-              console.log('✓ Matched:', repo.name, '| Lang:', repo.language, '| Desc:', repo.description?.substring(0, 40));
-            }
             return isGameDev;
           })
-          .slice(0, 6);
-
-        console.log('Filtered game projects:', gameProjects.length);
+          .slice(0, 3);
 
         let totalStars = 0;
         reposData.forEach((repo: GitHubRepo) => {
@@ -74,13 +56,10 @@ export default function Home() {
           followers: userData.followers || 0
         });
 
-        // If no game dev projects found, show recent public repos as fallback
-        const projectsToShow = gameProjects.length > 0 ? gameProjects : reposData.slice(0, 6);
-        console.log('Projects to display:', projectsToShow.length);
+        const projectsToShow = gameProjects.length > 0 ? gameProjects : reposData.slice(0, 3);
         setProjects(projectsToShow);
       } catch (error) {
         console.error('Failed to fetch GitHub data:', error);
-        // Keep previous state on error (don't clear projects)
       } finally {
         setLoading(false);
       }
@@ -89,224 +68,243 @@ export default function Home() {
     fetchData();
   }, []);
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.2,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 1, y: 0 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
-  };
-
   return (
-    <div>
-      {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-slate-900 to-slate-800 dark:from-slate-950 dark:to-slate-900 py-20 md:py-32">
-        {/* Animated background */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-600/20 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-purple-600/20 rounded-full blur-3xl animate-pulse"></div>
-        </div>
-
-        <div className="container-max container-px relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center max-w-3xl mx-auto"
-          >
-            {/* Badge */}
+    <div className="min-h-screen bg-white dark:bg-black text-black dark:text-white">
+      {/* Hero Section - Elegant with Sidebar */}
+      <section className="relative overflow-hidden py-24 md:py-32">
+        <div className="container-max container-px">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 md:gap-16 items-center">
+            {/* Sidebar - Left */}
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.2 }}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500/10 border border-blue-500/20 rounded-full mb-6"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
+              className="lg:col-span-5 space-y-8"
             >
-              <Github size={18} className="text-blue-400" />
-              <span className="text-sm text-blue-400 font-semibold">@LgrappaG</span>
+              {/* Decorative Element */}
+              <div className="inline-block">
+                <div className="w-1 h-12 bg-gradient-to-b from-amber-500 to-orange-500"></div>
+              </div>
+
+              {/* Main Heading */}
+              <div className="space-y-4">
+                <p className="text-sm md:text-base tracking-widest text-amber-600 dark:text-amber-400 font-light uppercase">
+                  Welcome to my portfolio
+                </p>
+                <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold italic text-black dark:text-white leading-tight">
+                  Game Developer & Full Stack Engineer
+                </h1>
+              </div>
+
+              {/* Bio */}
+              <p className="text-lg md:text-xl text-slate-700 dark:text-slate-300 leading-relaxed italic font-light max-w-md">
+                Crafting immersive gaming experiences with C# and Unity, combined with full-stack web development expertise.
+              </p>
+
+              {/* CTA Buttons */}
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+                className="flex flex-wrap gap-4 pt-4"
+              >
+                <a
+                  href="/portfolio/projects/"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-black dark:bg-white text-white dark:text-black font-semibold hover:gap-3 transition-all"
+                >
+                  Explore Projects <ArrowRight size={18} />
+                </a>
+                <a
+                  href="/portfolio/contact/"
+                  className="inline-flex items-center gap-2 px-6 py-3 border-2 border-black dark:border-white text-black dark:text-white font-semibold hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-all"
+                >
+                  Get In Touch
+                </a>
+              </motion.div>
+
+              {/* Social Links */}
+              <div className="flex gap-6 pt-8 border-t border-slate-300 dark:border-slate-700">
+                <a href="https://github.com/LgrappaG" target="_blank" rel="noopener noreferrer" className="text-slate-600 dark:text-slate-400 hover:text-black dark:hover:text-white transition-colors">
+                  <Github size={24} />
+                </a>
+              </div>
             </motion.div>
 
-            {/* Main heading */}
-            <h1 className="text-5xl md:text-7xl font-black mb-6 text-gradient leading-tight">
-              Game Developer
-              <br />
-              & Software Engineer
-            </h1>
-
-            {/* Subheading */}
-            <p className="text-lg md:text-xl text-slate-300 mb-8 leading-relaxed max-w-2xl mx-auto">
-              Creating immersive gaming experiences with C# and Unity. Specialized in gameplay mechanics, physics systems,
-              and interactive world building.
-            </p>
-
-            {/* CTA Buttons */}
+            {/* Content Area - Right */}
             <motion.div
-              variants={containerVariants}
-              initial="hidden"
-              animate="visible"
-              className="flex gap-4 justify-center flex-wrap"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.1 }}
+              className="lg:col-span-7"
             >
-              <motion.a
-                href="/portfolio/projects/"
-                variants={itemVariants}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded-lg hover:shadow-lg hover:shadow-blue-500/50 transition-all font-semibold"
-              >
-                View Projects
-              </motion.a>
-              <motion.a
-                href="/portfolio/contact/"
-                variants={itemVariants}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="px-8 py-4 border-2 border-slate-400 text-slate-300 rounded-lg hover:bg-slate-400/10 hover:border-slate-300 transition-all font-semibold"
-              >
-                Contact
-              </motion.a>
+              {/* Stats Grid */}
+              <div className="grid grid-cols-3 gap-6 mb-12">
+                {[
+                  { label: 'Projects', value: loading ? '—' : stats.repos, icon: '📦' },
+                  { label: 'Stars', value: loading ? '—' : stats.stars, icon: '⭐' },
+                  { label: 'Followers', value: loading ? '—' : stats.followers, icon: '👥' },
+                ].map((stat, i) => (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3 + i * 0.1 }}
+                    className="text-center p-6 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800"
+                  >
+                    <p className="text-3xl mb-2">{stat.icon}</p>
+                    <p className="text-2xl md:text-3xl font-bold text-gradient mb-1">{stat.value}</p>
+                    <p className="text-sm text-slate-600 dark:text-slate-400 uppercase tracking-wide">{stat.label}</p>
+                  </motion.div>
+                ))}
+              </div>
+
+              {/* Featured Work Placeholder */}
+              <div className="bg-gradient-to-br from-slate-100 dark:from-slate-900 to-slate-50 dark:to-slate-950 aspect-video rounded border border-slate-200 dark:border-slate-800 flex items-center justify-center">
+                <div className="text-center">
+                  <div className="text-5xl mb-3">🎮</div>
+                  <p className="text-slate-600 dark:text-slate-400 text-sm">Featured work placeholder</p>
+                </div>
+              </div>
             </motion.div>
-          </motion.div>
+          </div>
         </div>
       </section>
 
-      {/* Stats Section */}
-      <div className="container-max container-px py-16 md:py-24">
-        <motion.section
-          variants={containerVariants}
-          initial="visible"
-          animate="visible"
-          viewport={{ once: true }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16 md:mb-24"
-        >
-          {[
-            { label: 'Game Projects', value: loading ? '...' : stats.repos, icon: '🎮' },
-            { label: 'GitHub Stars', value: loading ? '...' : stats.stars, icon: '⭐' },
-            { label: 'Community', value: loading ? '...' : stats.followers, icon: '👥' },
-          ].map((stat, i) => (
-            <motion.div
-              key={i}
-              variants={itemVariants}
-              className="card-base p-8 text-center hover:scale-105 transition-transform border-2 border-transparent hover:border-blue-400/50 dark:hover:border-blue-500/50"
-            >
-              <div className="text-4xl mb-3">{stat.icon}</div>
-              <div className="text-4xl md:text-5xl font-bold text-gradient mb-2">{stat.value}</div>
-              <p className="text-slate-700 dark:text-slate-300 font-medium">{stat.label}</p>
-            </motion.div>
-          ))}
-        </motion.section>
+      {/* Divider */}
+      <div className="section-divider"></div>
 
-        {/* Featured Projects */}
-        <motion.section
-          id="projects"
-          initial={{ opacity: 1 }}
-          animate={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="mb-16 md:mb-24"
-        >
-          <div className="mb-12">
-            <h2 className="text-4xl md:text-5xl font-bold mb-4">🎮 My Games & Projects</h2>
-            <p className="text-lg text-slate-600 dark:text-slate-400">
-              A collection of game development projects featuring C#, Unity, and gameplay mechanics
-            </p>
-          </div>
-
+      {/* Featured Projects Section */}
+      <section className="py-24 md:py-32">
+        <div className="container-max container-px">
           <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
             viewport={{ once: true }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+            className="space-y-4 mb-16"
           >
+            <div className="inline-block">
+              <div className="w-1 h-12 bg-gradient-to-b from-amber-500 to-orange-500"></div>
+            </div>
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold italic">
+              Featured <span className="text-gradient">Projects</span>
+            </h2>
+            <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl italic font-light">
+              A selection of my most recent and impactful game development work
+            </p>
+          </motion.div>
+
+          {/* Projects Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {loading ? (
-              <div className="col-span-full text-center p-8">
+              <div className="col-span-full text-center py-12">
                 <p className="text-slate-500">Loading projects...</p>
               </div>
             ) : projects.length > 0 ? (
-              projects.map((project) => (
+              projects.map((project, i) => (
                 <motion.a
                   key={project.id}
                   href={project.html_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  variants={itemVariants}
-                  whileHover={{ y: -10 }}
-                  className="card-base p-6 cursor-pointer group overflow-hidden hover:shadow-xl hover:scale-105 transition-all duration-300 border-2 border-transparent hover:border-blue-400/50 dark:hover:border-blue-500/50"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.1 }}
+                  viewport={{ once: true }}
+                  className="group cursor-pointer"
                 >
-                  <div className="h-40 bg-gradient-to-br from-blue-500 to-purple-500 rounded-lg mb-4 flex items-center justify-center group-hover:shadow-lg transition-shadow relative">
-                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all rounded-lg"></div>
-                    <Github size={48} className="text-white" />
-                  </div>
-                  <h3 className="text-lg font-bold mb-2 text-blue-700 dark:text-blue-300 group-hover:text-blue-600 dark:group-hover:text-blue-200 transition-colors">
-                    {project.name}
-                  </h3>
-                  <p className="text-slate-700 dark:text-slate-300 mb-4 text-sm line-clamp-2">
-                    {project.description || 'No description'}
-                  </p>
-                  <div className="flex gap-2 flex-wrap mb-4">
-                    {project.language && (
-                      <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 rounded text-xs font-medium">
-                        {project.language}
-                      </span>
-                    )}
-                    {project.topics?.slice(0, 2).map((topic) => (
-                      <span
-                        key={topic}
-                        className="px-2 py-1 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded text-xs font-medium"
-                      >
-                        {topic}
-                      </span>
-                    ))}
-                  </div>
-                  <div className="flex justify-between text-sm text-slate-600 dark:text-slate-400">
-                    <span className="flex items-center gap-1">
-                      <Star size={14} className="text-yellow-500" />
-                      {project.stargazers_count}
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <Eye size={14} />
-                      {project.watchers_count}
-                    </span>
+                  {/* Project Card */}
+                  <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 hover:border-amber-500 dark:hover:border-amber-400 transition-all duration-300 aspect-square flex flex-col justify-between p-6 relative overflow-hidden">
+                    {/* Accent line */}
+                    <div className="absolute top-0 left-0 w-1 h-12 bg-gradient-to-b from-amber-500 to-orange-500 group-hover:h-full transition-all duration-500"></div>
+
+                    {/* Content */}
+                    <div className="pl-4">
+                      <p className="text-xs uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-3">
+                        {project.language || 'Project'}
+                      </p>
+                      <h3 className="text-xl font-bold mb-2 group-hover:text-gradient transition-colors">
+                        {project.name}
+                      </h3>
+                      <p className="text-sm text-slate-600 dark:text-slate-400 line-clamp-2 italic font-light">
+                        {project.description || 'No description available'}
+                      </p>
+                    </div>
+
+                    {/* Footer */}
+                    <div className="flex items-center justify-between text-sm text-slate-600 dark:text-slate-400 pl-4 pt-4 border-t border-slate-200 dark:border-slate-800">
+                      <div className="flex gap-3">
+                        <span className="flex items-center gap-1">
+                          <Star size={14} />
+                          {project.stargazers_count}
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <Eye size={14} />
+                          {project.watchers_count}
+                        </span>
+                      </div>
+                      <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                    </div>
                   </div>
                 </motion.a>
               ))
             ) : (
-              <div className="col-span-full text-center p-8">
-                <p className="text-slate-500">No game dev projects found</p>
+              <div className="col-span-full text-center py-12">
+                <p className="text-slate-500">No projects found</p>
               </div>
             )}
-          </motion.div>
-        </motion.section>
+          </div>
 
-        {/* CTA Section */}
-        <motion.section
-          initial={{ opacity: 1, scale: 1 }}
-          animate={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-3xl p-12 md:p-16 text-center text-white"
-        >
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Ready for Your Next Game?</h2>
-          <p className="text-lg mb-8 opacity-90 max-w-2xl mx-auto">
-            Whether it's a game project, technical collaboration, or just want to discuss game development - let's connect!
-          </p>
-          <motion.a
-            href="/portfolio/contact/"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="inline-block px-8 py-4 bg-white text-blue-600 font-bold rounded-lg hover:bg-slate-100 transition-colors"
+          {/* View All Link */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+            viewport={{ once: true }}
+            className="flex justify-center mt-16"
           >
-            Get In Touch
-          </motion.a>
-        </motion.section>
-      </div>
+            <a
+              href="/portfolio/projects/"
+              className="inline-flex items-center gap-2 text-lg font-semibold text-black dark:text-white hover:text-gradient transition-colors group"
+            >
+              View All Projects <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+            </a>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Divider */}
+      <div className="section-divider"></div>
+
+      {/* CTA Section */}
+      <section className="py-24 md:py-32">
+        <div className="container-max container-px">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="bg-black dark:bg-white text-white dark:text-black p-12 md:p-16 lg:p-20"
+          >
+            <div className="max-w-2xl mx-auto text-center space-y-8">
+              <h2 className="text-4xl md:text-5xl font-bold italic">
+                Let's Collaborate
+              </h2>
+              <p className="text-lg md:text-xl text-gray-300 dark:text-gray-700 italic font-light">
+                Whether you have a game project in mind, need technical guidance, or want to discuss game development innovations, I'm ready to help bring your vision to life.
+              </p>
+              <motion.a
+                href="/portfolio/contact/"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="inline-flex items-center gap-2 px-8 py-4 bg-white dark:bg-black text-black dark:text-white font-semibold hover:gap-3 transition-all"
+              >
+                Start a Conversation <ArrowRight size={20} />
+              </motion.a>
+            </div>
+          </motion.div>
+        </div>
+      </section>
     </div>
   );
 }
