@@ -44,7 +44,7 @@ export default function About() {
   ];
 
   return (
-    <div className="min-h-screen bg-white dark:bg-black text-black dark:text-white">
+    <div className="min-h-screen bg-transparent text-black dark:text-white">
       {/* Hero Section */}
       <section className="py-24 md:py-32 border-b border-slate-200 dark:border-slate-800">
         <div className="container-max container-px">
@@ -83,7 +83,7 @@ export default function About() {
                 {/* Image with Border */}
                 <div className="w-full h-full relative rounded-lg overflow-hidden border-2 border-slate-300 dark:border-slate-700">
                   <img
-                    src="/images/about.jpg"
+                    src="/portfolio/images/about.jpg"
                     alt="Profile"
                     className="object-cover w-full h-full"
                   />

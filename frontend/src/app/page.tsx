@@ -69,7 +69,7 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-white dark:bg-black text-black dark:text-white">
+    <div className="min-h-screen bg-transparent text-black dark:text-white">
       {/* Hero Section - Elegant with Sidebar */}
       <section className="relative overflow-hidden py-24 md:py-32">
         <div className="container-max container-px">
