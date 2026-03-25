@@ -90,19 +90,19 @@ export default function Projects() {
   }, []);
 
   const containerVariants = {
-    hidden: { opacity: 0 },
+    hidden: { opacity: 1 },
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.2,
+        staggerChildren: 0.05,
+        delayChildren: 0,
       },
     },
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+    hidden: { opacity: 1, y: 0 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.3 } },
   };
 
   return (
@@ -118,8 +118,8 @@ export default function Projects() {
       {/* Projects Grid */}
       <motion.section
         variants={containerVariants}
-        initial="hidden"
-        whileInView="visible"
+        initial="visible"
+        animate="visible"
         viewport={{ once: true }}
         className="mb-16 md:mb-24"
       >

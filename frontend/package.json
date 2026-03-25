@@ -5,16 +5,16 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build && node scripts/copy-public-files.js",
     "start": "next start",
     "lint": "next lint",
     "type-check": "tsc --noEmit",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
-    "export": "next build && echo 'Static export ready in ./out'",
-    "deploy-gh": "next build && gh-pages -d out -t",
-    "deploy-gh-windows": "next build && node scripts/deploy-gh-pages.js"
+    "export": "next build && node scripts/copy-public-files.js && echo 'Static export ready in ./out'",
+    "deploy-gh": "next build && node scripts/copy-public-files.js && gh-pages -d out -t",
+    "deploy-gh-windows": "next build && node scripts/copy-public-files.js && node scripts/deploy-gh-pages.js"
   },
   "dependencies": {
     "react": "^18.2.0",
