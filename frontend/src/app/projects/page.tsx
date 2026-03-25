@@ -244,7 +244,7 @@ export default function Projects() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
-            className="bg-black dark:bg-white text-white dark:text-black p-12 md:p-16 lg:p-20"
+            className="bg-black/50 dark:bg-white/30 text-white dark:text-black p-12 md:p-16 lg:p-20 backdrop-blur-sm"
           >
             <div className="max-w-2xl mx-auto text-center space-y-8">
               <h2 className="text-4xl md:text-5xl font-black italic">
