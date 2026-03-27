@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { EmailService } from '@/services/EmailService';
 import { logger } from '@/utils/logger';
 import { ApiResponse } from '@/types';
+import { isValidEmail, sanitizeString } from '@/utils/validators';
 
 export class ContactController {
   private emailService: EmailService;
@@ -18,7 +19,7 @@ export class ContactController {
     try {
       const { name, email, subject, message } = req.body;
 
-      // Validation
+      // ✅ SECURITY: Validate and sanitize all inputs
       if (!name?.trim()) {
         res.status(400).json({
           success: false,
@@ -55,9 +56,8 @@ export class ContactController {
         return;
       }
 
-      // Basic email format validation
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(email)) {
+      // ✅ SECURITY FIX: Use improved email validation (RFC 5322 compliant)
+      if (!isValidEmail(email.trim())) {
         res.status(400).json({
           success: false,
           error: 'Bad Request',
@@ -66,12 +66,28 @@ export class ContactController {
         return;
       }
 
+      // ✅ SECURITY: Sanitize all inputs before sending
+      const sanitizedName = sanitizeString(name, { maxLength: 100 });
+      const sanitizedEmail = email.trim();
+      const sanitizedSubject = sanitizeString(subject, { maxLength: 200 });
+      const sanitizedMessage = sanitizeString(message, { maxLength: 5000 });
+
+      // Validate sanitization results
+      if (!sanitizedName || !sanitizedSubject || !sanitizedMessage) {
+        res.status(400).json({
+          success: false,
+          error: 'Bad Request',
+          message: 'Invalid input - form fields contain invalid characters',
+        } as ApiResponse<null>);
+        return;
+      }
+
       // Send email
       await this.emailService.sendContactEmail(
-        name.trim(),
-        email.trim(),
-        subject.trim(),
-        message.trim()
+        sanitizedName,
+        sanitizedEmail,
+        sanitizedSubject,
+        sanitizedMessage
       );
 
       res.status(200).json({

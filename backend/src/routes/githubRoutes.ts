@@ -3,6 +3,8 @@ import { GitHubController } from '@/controllers/GitHubController';
 import { GitHubService } from '@/services/GitHubService';
 import { ProjectService } from '@/services/ProjectService';
 import { CacheService } from '@/services/CacheService';
+import { authMiddleware, adminOnly } from '@/middleware/authMiddleware';
+import { adminActionLimiter } from '@/middleware/rateLimitMiddleware';
 
 export function createGitHubRoutes(
   githubService: GitHubService,
@@ -41,15 +43,20 @@ export function createGitHubRoutes(
   );
 
   /**
-   * Admin Routes (protected by middleware in main server)
+   * ✅ SECURITY FIX: Admin Routes (Protected by authMiddleware + adminOnly)
    */
 
-  // POST /api/github/sync - Manual sync trigger
-  router.post('/sync', (req: Request, res: Response) =>
-    githubController.syncProjects(req, res)
+  // POST /api/github/sync - Manual sync trigger (admin only)
+  router.post(
+    '/sync',
+    authMiddleware,
+    adminOnly,
+    adminActionLimiter,
+    (req: Request, res: Response) => githubController.syncProjects(req, res)
   );
 
   return router;
 }
 
 export default createGitHubRoutes;
+

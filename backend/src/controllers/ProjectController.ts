@@ -4,6 +4,7 @@ import { GitHubService } from '@/services/GitHubService';
 import { CacheService } from '@/services/CacheService';
 import { logger } from '@/utils/logger';
 import { ApiResponse, PaginatedResponse, ProjectStatsResponse } from '@/types';
+import { validatePagination, validateSearchQuery, parseBooleanString } from '@/utils/validators';
 
 export class ProjectController {
   private projectService: ProjectService;
@@ -29,15 +30,18 @@ export class ProjectController {
         isGameDev,
       } = req.query;
 
+      // ✅ SECURITY FIX: Validate pagination bounds
+      const { page: validPage, limit: validLimit } = validatePagination(page, limit);
+
       const filters = {
-        page: parseInt(page as string),
-        limit: parseInt(limit as string),
+        page: validPage,
+        limit: validLimit,
         category: category as string | undefined,
         language: language as string | undefined,
         sort: sort as 'recent' | 'popular' | 'oldest',
         search: search as string | undefined,
-        featured: featured ? featured === 'true' : undefined,
-        isGameDev: isGameDev ? isGameDev === 'true' : undefined,
+        featured: parseBooleanString(featured as any),
+        isGameDev: parseBooleanString(isGameDev as any),
       };
 
       const result = await this.projectService.getProjects(filters);
@@ -160,7 +164,19 @@ export class ProjectController {
         return;
       }
 
-      const projects = await this.projectService.searchProjects(q);
+      // ✅ SECURITY FIX: Validate and sanitize search query
+      const { valid, query: sanitizedQuery } = validateSearchQuery(q);
+
+      if (!valid) {
+        res.status(400).json({
+          success: false,
+          error: 'Bad Request',
+          message: 'Search query must be 1-100 alphanumeric characters (spaces, hyphens, dots allowed)',
+        });
+        return;
+      }
+
+      const projects = await this.projectService.searchProjects(sanitizedQuery);
 
       res.status(200).json({
         success: true,
