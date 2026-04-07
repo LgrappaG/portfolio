@@ -85,42 +85,32 @@ export function UniverseControls() {
 
       {/* Legend */}
       <div className="bg-slate-800/90 border border-slate-700 rounded-lg p-3 backdrop-blur-sm min-w-max">
-        <p className="text-xs font-semibold text-slate-300 mb-3">Legend</p>
+        <p className="text-xs font-semibold text-slate-300 mb-3">Info</p>
 
         <div className="space-y-2 text-xs text-slate-400">
           <div className="flex items-center gap-2">
-            <svg className="w-3 h-3" viewBox="0 0 12 2">
-              <line
-                x1="0"
-                y1="1"
-                x2="12"
-                y2="1"
-                stroke="#06b6d4"
-                strokeWidth="1.5"
-                opacity="0.4"
-              />
-            </svg>
-            <span>Shared technology</span>
+            <div className="w-2 h-2 rounded-full bg-cyan-500"></div>
+            <span>Click to view details</span>
           </div>
 
           <div className="flex items-center gap-2">
-            <svg className="w-3 h-3" viewBox="0 0 12 2">
-              <line
-                x1="0"
-                y1="1"
-                x2="12"
-                y2="1"
-                stroke="#a855f7"
-                strokeWidth="1"
-                opacity="0.3"
-              />
-            </svg>
-            <span>Same category</span>
+            <div className="w-2 h-2 rounded-full bg-slate-500"></div>
+            <span>Circle = popularity (stars + forks)</span>
           </div>
 
           <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded bg-yellow-400" />
-            <span>Node color = language</span>
+            <div className="w-3 h-3 rounded border border-cyan-500"></div>
+            <span>Cyan = Web Dev</span>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <div className="w-3 h-3 rounded border border-purple-500"></div>
+            <span>Purple = Game Dev</span>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <div className="w-3 h-3 rounded border border-amber-500"></div>
+            <span>Amber = Tools</span>
           </div>
         </div>
       </div>

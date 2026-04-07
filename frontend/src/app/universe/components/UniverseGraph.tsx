@@ -1,29 +1,15 @@
 'use client';
 
-import React, { useEffect, useRef, useState, useMemo } from 'react';
-import dynamic from 'next/dynamic';
+import React, { useState, useMemo } from 'react';
 import { useUniverseStore, selectFilteredGraphData } from '@/lib/store/universeStore';
-import { findConnectedNodes } from '@/lib/utils/graphBuilder';
 import type { GraphNode } from '@/types/graph';
-
-const ForceGraph3D = dynamic(
-  () => import('react-force-graph').then((mod) => mod.ForceGraph2D),
-  { ssr: false, loading: () => <div>Loading graph...</div> }
-);
 
 interface UniverseGraphProps {
   onNodeClick?: (node: GraphNode) => void;
 }
 
 export function UniverseGraph({ onNodeClick }: UniverseGraphProps) {
-  const fgRef = useRef<any>(null);
-  const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  // Get store state
   const graphData = useUniverseStore((s) => s.graphData);
-  const selectedNode = useUniverseStore((s) => s.selectedNode);
-  const zoomLevel = useUniverseStore((s) => s.zoomLevel);
   const filters = useUniverseStore((s) => s.filters);
 
   // Get filtered data
@@ -32,168 +18,11 @@ export function UniverseGraph({ onNodeClick }: UniverseGraphProps) {
     return selectFilteredGraphData(state);
   }, [graphData, filters]);
 
-  // Track hovered node for visual feedback
   const [hoveredNodeId, setHoveredNodeId] = useState<string | null>(null);
-  const connectedNodes = useMemo(() => {
-    if (!hoveredNodeId || !filteredData) return new Set<string>();
-    return new Set(findConnectedNodes(hoveredNodeId, filteredData.links));
-  }, [hoveredNodeId, filteredData]);
-
-  // Track window resize
-  useEffect(() => {
-    const handleResize = () => {
-      if (containerRef.current) {
-        setContainerSize({
-          width: containerRef.current.clientWidth,
-          height: containerRef.current.clientHeight,
-        });
-      }
-    };
-
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  // Configure force graph when data changes
-  useEffect(() => {
-    if (!fgRef.current || !filteredData) return;
-
-    const fg = fgRef.current;
-
-    // Physics configuration
-    fg.d3Force('link')?.distance(80);
-    fg.d3Force('charge')?.strength(-300);
-    fg.d3Force('collide')?.radius((d: any) => (d.val || 5) / 100 + 15);
-
-    // Node rendering
-    fg.nodeCanvasObject(
-      (
-        node: any,
-        ctx: CanvasRenderingContext2D,
-        globalScale: number
-      ) => {
-        // Calculate node size
-        const baseSize = Math.max((node.val as number) / 100, 3);
-        const size = baseSize / globalScale;
-
-        // Determine fill color
-        let fillColor = node.color || '#858585';
-
-        // Highlight hovered node
-        if (hoveredNodeId === node.id) {
-          fillColor = '#fbbf24'; // Warm glow
-        }
-
-        // Highlight selected node
-        if (selectedNode?.id === node.id) {
-          fillColor = '#06b6d4'; // Cyan
-        }
-
-        // Dim nodes connected to hovered node
-        if (
-          hoveredNodeId &&
-          hoveredNodeId !== node.id &&
-          connectedNodes.has(node.id)
-        ) {
-          fillColor = fillColor;
-          // Will apply reduced opacity below
-        }
-
-        // Draw node circle
-        ctx.globalAlpha = 1;
-        ctx.fillStyle = fillColor;
-        ctx.beginPath();
-        ctx.arc(node.x, node.y, size, 0, 2 * Math.PI);
-        ctx.fill();
-
-        // Draw glow effect on selected
-        if (selectedNode?.id === node.id) {
-          ctx.strokeStyle = 'rgba(6, 182, 212, 0.8)';
-          ctx.lineWidth = 2 / globalScale;
-          ctx.beginPath();
-          ctx.arc(node.x, node.y, size + 3, 0, 2 * Math.PI);
-          ctx.stroke();
-        }
-
-        // Draw label if zoom >= 2
-        if (zoomLevel >= 2) {
-          const fontSize = Math.max(8 + zoomLevel * 2, 4) / globalScale;
-          ctx.globalAlpha = 1;
-          ctx.font = `${fontSize}px sans-serif`;
-          ctx.fillStyle = '#fff';
-          ctx.textAlign = 'center';
-          ctx.textBaseline = 'middle';
-          ctx.fillText(node.name, node.x, node.y - size - 8);
-        }
-      }
-    );
-
-    // Link rendering
-    fg.linkCanvasObject((link: any, ctx: CanvasRenderingContext2D) => {
-      const source = link.source as any;
-      const target = link.target as any;
-
-      // Link styling
-      ctx.strokeStyle =
-        link.type === 'technology'
-          ? 'rgba(6, 182, 212, 0.4)'
-          : 'rgba(168, 85, 247, 0.3)';
-      ctx.lineWidth = link.type === 'technology' ? 2 : 1;
-
-      // Draw line
-      ctx.beginPath();
-      ctx.moveTo(source.x, source.y);
-      ctx.lineTo(target.x, target.y);
-      ctx.stroke();
-
-      // Draw label if zoom >= 3
-      if (zoomLevel >= 3 && (hoveredNodeId === source.id || hoveredNodeId === target.id)) {
-        const midX = (source.x + target.x) / 2;
-        const midY = (source.y + target.y) / 2;
-
-        ctx.fillStyle = '#fff';
-        ctx.font = '10px sans-serif';
-        ctx.textAlign = 'center';
-        ctx.fillText(link.label || '', midX, midY);
-      }
-    });
-
-    // Node click handler
-    fg.onNodeClick((node: any) => {
-      const selectedGraphNode = filteredData.nodes.find(
-        (n) => n.id === node.id
-      );
-      if (selectedGraphNode && onNodeClick) {
-        onNodeClick(selectedGraphNode);
-      }
-    });
-
-    // Node hover handler
-    fg.onNodeHover((node: any) => {
-      setHoveredNodeId(node?.id || null);
-      containerRef.current!.style.cursor = node ? 'pointer' : 'default';
-    });
-  }, [filteredData, zoomLevel, hoveredNodeId, selectedNode, onNodeClick]);
-
-  // Handle double-click to reset view
-  useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
-
-    const handleDoubleClick = () => {
-      if (fgRef.current) {
-        fgRef.current.zoomToFit(400, 50);
-      }
-    };
-
-    container.addEventListener('dblclick', handleDoubleClick);
-    return () => container.removeEventListener('dblclick', handleDoubleClick);
-  }, []);
 
   if (!filteredData) {
     return (
-      <div className="w-full h-full flex items-center justify-center bg-slate-900">
+      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-slate-900 to-slate-950">
         <div className="text-center">
           <div className="w-12 h-12 border-4 border-slate-700 border-t-cyan-500 rounded-full animate-spin mx-auto mb-4"></div>
           <p className="text-slate-300 text-sm">Loading Project Universe...</p>
@@ -203,40 +32,84 @@ export function UniverseGraph({ onNodeClick }: UniverseGraphProps) {
   }
 
   return (
-    <div
-      ref={containerRef}
-      className="relative w-full h-full bg-gradient-to-br from-slate-900 to-slate-950"
-    >
-      <ForceGraph3D
-        ref={fgRef}
-        graphData={filteredData}
-        width={containerSize.width}
-        height={containerSize.height}
-        nodeColor="color"
-        nodeVal="val"
-        nodeRelSize={4}
-        // @ts-ignore
-        warmupTicks={40}
-        cooldownTicks={200}
-        backgroundColor="transparent"
-      />
+    <div className="w-full h-full relative bg-gradient-to-br from-slate-900 to-slate-950 overflow-auto">
+      {/* Grid of projects */}
+      <div className="p-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {filteredData.nodes.map((node) => (
+              <div
+                key={node.id}
+                onClick={() => onNodeClick?.(node)}
+                onMouseEnter={() => setHoveredNodeId(node.id)}
+                onMouseLeave={() => setHoveredNodeId(null)}
+                className="group relative p-4 bg-slate-800/50 border border-slate-700 rounded-lg cursor-pointer transition-all duration-200 hover:border-cyan-500 hover:bg-slate-700/50 hover:shadow-lg hover:shadow-cyan-500/10"
+              >
+                {/* Node sizing circle indicator */}
+                <div className="absolute top-3 right-3 flex items-center gap-2">
+                  <div
+                    className="rounded-full transition-all"
+                    style={{
+                      width: `${Math.max(node.val / 100, 3)}px`,
+                      height: `${Math.max(node.val / 100, 3)}px`,
+                      backgroundColor: node.color,
+                    }}
+                  />
+                </div>
 
-      {/* Info text */}
-      <div className="absolute top-6 left-6 text-sm text-slate-300 pointer-events-none">
-        <p className="font-semibold text-cyan-400 mb-2">Project Universe</p>
-        <p className="text-xs text-slate-400 mb-1">
-          <span className="inline-block w-2 h-2 rounded-full bg-cyan-500 mr-2"></span>
-          Shared technology
-        </p>
-        <p className="text-xs text-slate-400 mb-4">
-          <span className="inline-block w-2 h-2 rounded-full bg-purple-500 mr-2"></span>
-          Same category
-        </p>
-        <p className="text-xs text-slate-500">Scroll to zoom • Click to select • Double-click to reset</p>
+                {/* Name */}
+                <h3 className="text-sm font-bold text-white mb-2 pr-12 line-clamp-2">
+                  {node.name}
+                </h3>
+
+                {/* Language badge */}
+                {node.language && (
+                  <div className="mb-3">
+                    <span className="inline-block px-2 py-0.5 text-xs font-medium bg-slate-700 text-cyan-400 rounded border border-slate-600">
+                      {node.language}
+                    </span>
+                  </div>
+                )}
+
+                {/* Description */}
+                {node.description && (
+                  <p className="text-xs text-slate-400 mb-3 line-clamp-2">
+                    {node.description}
+                  </p>
+                )}
+
+                {/* Stats */}
+                <div className="flex items-center gap-3 text-xs text-slate-400 mb-3">
+                  <span>⭐ {node.stars}</span>
+                  <span>🔀 {node.forks}</span>
+                  <span>🐛 {node.issues}</span>
+                </div>
+
+                {/* Category badge */}
+                <div className="flex items-center justify-between">
+                  <span className="inline-block px-2 py-0.5 text-xs font-medium bg-slate-900 text-slate-300 rounded capitalize">
+                    {node.category.replace('-', ' ')}
+                  </span>
+                </div>
+
+                {/* Hover overlay */}
+                {hoveredNodeId === node.id && (
+                  <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/0 via-cyan-500/5 to-cyan-500/0 rounded-lg pointer-events-none" />
+                )}
+              </div>
+            ))}
+          </div>
+
+          {filteredData.nodes.length === 0 && (
+            <div className="text-center py-12">
+              <p className="text-slate-400 text-sm">No projects match the selected filters</p>
+            </div>
+          )}
+        </div>
       </div>
 
-      {/* Stats */}
-      <div className="absolute bottom-6 left-6 text-xs text-slate-400 bg-slate-800/80 px-3 py-2 rounded border border-slate-700 pointer-events-none">
+      {/* Info overlay */}
+      <div className="absolute bottom-6 left-6 text-xs text-slate-400 bg-slate-800/80 px-3 py-2 rounded border border-slate-700 pointer-events-none backdrop-blur-sm">
         <p>{filteredData.nodes.length} projects • {filteredData.links.length} connections</p>
       </div>
     </div>
