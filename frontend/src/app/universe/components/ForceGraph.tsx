@@ -4,17 +4,24 @@ import React, { useEffect, useRef, useMemo, useState } from 'react';
 import { useUniverseStore, selectFilteredGraphData } from '@/lib/store/universeStore';
 import { findConnectedNodes } from '@/lib/utils/graphBuilder';
 
-const NODE_RADIUS = 8;
-const CHARGE_STRENGTH = -150;
-const LINK_DISTANCE = 60;
-const FRICTION = 0.95;
-const SIMULATION_STEPS = 100;
+const NODE_RADIUS = 18; // Büyütüldü
+const DAMPING = 0.92; // Suyun içinde gibi yavaşlama
+const DRAG_FORCE = 0.4;
 
 interface NodePosition {
   x: number;
   y: number;
+  targetX: number;
+  targetY: number;
   vx: number;
   vy: number;
+}
+
+interface AnimatedParticle {
+  sourceId: string;
+  targetId: string;
+  progress: number;
+  speed: number;
 }
 
 export function ForceGraph() {
@@ -27,8 +34,10 @@ export function ForceGraph() {
   const selectNode = useUniverseStore((s) => s.selectNode);
 
   const [hoveredNodeId, setHoveredNodeId] = useState<string | null>(null);
+  const [draggedNodeId, setDraggedNodeId] = useState<string | null>(null);
   const nodePositionsRef = useRef<Map<string, NodePosition>>(new Map());
-  const isSimulatingRef = useRef(true);
+  const particlesRef = useRef<AnimatedParticle[]>([]);
+  const animationTimeRef = useRef(0);
 
   // Get filtered data
   const filteredData = useMemo(() => {
@@ -36,21 +45,25 @@ export function ForceGraph() {
     return selectFilteredGraphData(state);
   }, [graphData, filters]);
 
-  // Initialize node positions
+  // Initialize node positions in circle
   useEffect(() => {
     if (!filteredData || filteredData.nodes.length === 0) return;
 
     const positions = nodePositionsRef.current;
     const centerX = window.innerWidth / 2;
     const centerY = window.innerHeight / 2;
-    const radius = Math.min(centerX, centerY) * 0.6;
+    const radius = Math.min(centerX, centerY) * 0.5;
 
     filteredData.nodes.forEach((node, i) => {
       if (!positions.has(node.id)) {
         const angle = (i / filteredData.nodes.length) * Math.PI * 2;
+        const x = centerX + Math.cos(angle) * radius;
+        const y = centerY + Math.sin(angle) * radius;
         positions.set(node.id, {
-          x: centerX + Math.cos(angle) * radius,
-          y: centerY + Math.sin(angle) * radius,
+          x,
+          y,
+          targetX: x,
+          targetY: y,
           vx: 0,
           vy: 0,
         });
@@ -58,7 +71,7 @@ export function ForceGraph() {
     });
   }, [filteredData]);
 
-  // Force simulation + rendering
+  // Main animation loop
   useEffect(() => {
     if (!canvasRef.current || !filteredData || filteredData.nodes.length === 0) {
       return;
@@ -67,6 +80,7 @@ export function ForceGraph() {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d')!;
     const positions = nodePositionsRef.current;
+    const particles = particlesRef.current;
 
     // Update canvas size
     const updateSize = () => {
@@ -76,7 +90,6 @@ export function ForceGraph() {
     updateSize();
     window.addEventListener('resize', updateSize);
 
-    // Get connected nodes for current hovered/selected node
     const getConnectedIds = (nodeId: string | null) => {
       if (!nodeId) return new Set<string>();
       const linked = findConnectedNodes(nodeId, filteredData.links);
@@ -85,103 +98,135 @@ export function ForceGraph() {
 
     const connectedIds = getConnectedIds(selectedNode?.id || hoveredNodeId);
 
-    // Force simulation step
-    const simulationStep = () => {
-      const nodes = filteredData.nodes;
-      const links = filteredData.links;
-
-      // Apply repulsive forces (charge)
-      for (let i = 0; i < nodes.length; i++) {
-        for (let j = i + 1; j < nodes.length; j++) {
-          const n1 = nodes[i];
-          const n2 = nodes[j];
-          const p1 = positions.get(n1.id)!;
-          const p2 = positions.get(n2.id)!;
-
-          const dx = p2.x - p1.x;
-          const dy = p2.y - p1.y;
-          let dist = Math.sqrt(dx * dx + dy * dy) || 0.1;
-          const force = CHARGE_STRENGTH / (dist * dist);
-
-          const fx = (dx / dist) * force;
-          const fy = (dy / dist) * force;
-
-          p1.vx -= fx;
-          p1.vy -= fy;
-          p2.vx += fx;
-          p2.vy += fy;
-        }
-      }
-
-      // Apply attractive forces (links)
-      links.forEach((link) => {
-        const n1 = filteredData.nodes.find((n) => n.id === link.source)!;
-        const n2 = filteredData.nodes.find((n) => n.id === link.target)!;
-        const p1 = positions.get(n1.id)!;
-        const p2 = positions.get(n2.id)!;
-
-        const dx = p2.x - p1.x;
-        const dy = p2.y - p1.y;
-        let dist = Math.sqrt(dx * dx + dy * dy) || 0.1;
-        const force = (dist - LINK_DISTANCE) * 0.1;
-
-        const fx = (dx / dist) * force;
-        const fy = (dy / dist) * force;
-
-        p1.vx += fx;
-        p1.vy += fy;
-        p2.vx -= fx;
-        p2.vy -= fy;
-      });
-
-      // Update positions and apply friction
-      nodes.forEach((node) => {
-        const pos = positions.get(node.id)!;
-        pos.vx *= FRICTION;
-        pos.vy *= FRICTION;
-
-        // Boundary damping
-        const margin = 50;
-        if (pos.x < margin || pos.x > canvas.width - margin) pos.vx *= -0.5;
-        if (pos.y < margin || pos.y > canvas.height - margin) pos.vy *= -0.5;
-
-        pos.x = Math.max(margin, Math.min(canvas.width - margin, pos.x + pos.vx));
-        pos.y = Math.max(margin, Math.min(canvas.height - margin, pos.y + pos.vy));
-      });
-    };
-
     // Render frame
-    const render = () => {
+    const render = (time: number) => {
       // Clear canvas
       ctx.fillStyle = '#0f172a';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // Draw links
-      ctx.strokeStyle = 'rgba(6, 182, 212, 0.2)';
-      ctx.lineWidth = 1.5;
+      // Update positions - nodes spring back to target
+      filteredData.nodes.forEach((node) => {
+        const pos = positions.get(node.id)!;
+
+        // Spring force back to target
+        const dx = pos.targetX - pos.x;
+        const dy = pos.targetY - pos.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+
+        if (distance > 0.1) {
+          const spring = 0.08;
+          pos.vx += dx * spring;
+          pos.vy += dy * spring;
+        }
+
+        // Damping (water resistance)
+        pos.vx *= DAMPING;
+        pos.vy *= DAMPING;
+
+        // Update position
+        pos.x += pos.vx;
+        pos.y += pos.vy;
+
+        // Boundary soft damping
+        const margin = 100;
+        if (pos.x < margin) {
+          pos.x = margin;
+          pos.vx = 0;
+        }
+        if (pos.x > canvas.width - margin) {
+          pos.x = canvas.width - margin;
+          pos.vx = 0;
+        }
+        if (pos.y < margin) {
+          pos.y = margin;
+          pos.vy = 0;
+        }
+        if (pos.y > canvas.height - margin) {
+          pos.y = canvas.height - margin;
+          pos.vy = 0;
+        }
+      });
+
+      // Update particles for pulse animation
+      particles.forEach((p, idx) => {
+        p.progress += p.speed;
+        if (p.progress > 1) {
+          particles.splice(idx, 1);
+          return;
+        }
+      });
+
+      // Add new particles periodically
+      if (Math.floor(time / 300) > animationTimeRef.current) {
+        animationTimeRef.current = Math.floor(time / 300);
+        filteredData.links.forEach((link) => {
+          if (Math.random() < 0.7) {
+            particles.push({
+              sourceId: String(link.source),
+              targetId: String(link.target),
+              progress: 0,
+              speed: 0.012 + Math.random() * 0.008,
+            });
+          }
+        });
+      }
+
+      // Draw links with particles
+      ctx.globalAlpha = 1;
       filteredData.links.forEach((link) => {
         const p1 = positions.get(String(link.source));
         const p2 = positions.get(String(link.target));
         if (!p1 || !p2) return;
 
-        // Highlight links if connected to hovered/selected
-        if (connectedIds.has(String(link.source)) && connectedIds.has(String(link.target))) {
-          ctx.strokeStyle = link.type === 'technology'
-            ? 'rgba(6, 182, 212, 0.6)'
-            : 'rgba(168, 85, 247, 0.6)';
-          ctx.lineWidth = 2;
-        } else {
-          ctx.strokeStyle = 'rgba(6, 182, 212, 0.15)';
-          ctx.lineWidth = 1;
-        }
+        const isConnected =
+          connectedIds.has(String(link.source)) &&
+          connectedIds.has(String(link.target));
 
+        // Draw base line
+        ctx.strokeStyle = isConnected
+          ? link.type === 'technology'
+            ? 'rgba(6, 182, 212, 0.3)'
+            : 'rgba(168, 85, 247, 0.3)'
+          : 'rgba(100, 120, 150, 0.1)';
+        ctx.lineWidth = isConnected ? 2 : 0.8;
         ctx.beginPath();
         ctx.moveTo(p1.x, p1.y);
         ctx.lineTo(p2.x, p2.y);
         ctx.stroke();
       });
 
+      // Draw animated particles on links
+      particles.forEach((p) => {
+        const p1 = positions.get(p.sourceId);
+        const p2 = positions.get(p.targetId);
+        if (!p1 || !p2) return;
+
+        const x = p1.x + (p2.x - p1.x) * p.progress;
+        const y = p1.y + (p2.y - p1.y) * p.progress;
+
+        const link = filteredData.links.find(
+          (l) =>
+            (String(l.source) === p.sourceId && String(l.target) === p.targetId) ||
+            (String(l.source) === p.targetId && String(l.target) === p.sourceId)
+        );
+
+        const color =
+          link?.type === 'technology'
+            ? 'rgba(6, 182, 212,'
+            : 'rgba(168, 85, 247,';
+
+        const alpha = Math.sin(p.progress * Math.PI) * 0.8;
+        const size = 3 + Math.sin(p.progress * Math.PI) * 2;
+
+        ctx.globalAlpha = alpha;
+        ctx.fillStyle = color + alpha + ')';
+        ctx.beginPath();
+        ctx.arc(x, y, size, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
       // Draw nodes
+      ctx.globalAlpha = 1;
       filteredData.nodes.forEach((node) => {
         const pos = positions.get(node.id)!;
 
@@ -196,7 +241,7 @@ export function ForceGraph() {
           ctx.strokeStyle = 'rgba(6, 182, 212, 0.8)';
           ctx.lineWidth = 3;
           ctx.beginPath();
-          ctx.arc(pos.x, pos.y, NODE_RADIUS + 6, 0, Math.PI * 2);
+          ctx.arc(pos.x, pos.y, NODE_RADIUS + 8, 0, Math.PI * 2);
           ctx.stroke();
         }
 
@@ -205,33 +250,22 @@ export function ForceGraph() {
           ctx.strokeStyle = 'rgba(251, 191, 36, 0.6)';
           ctx.lineWidth = 2;
           ctx.beginPath();
-          ctx.arc(pos.x, pos.y, NODE_RADIUS + 4, 0, Math.PI * 2);
+          ctx.arc(pos.x, pos.y, NODE_RADIUS + 5, 0, Math.PI * 2);
           ctx.stroke();
         }
 
         // Label below node
         ctx.fillStyle = '#e2e8f0';
-        ctx.font = 'bold 11px sans-serif';
+        ctx.font = 'bold 12px sans-serif';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'top';
-        ctx.fillText(node.name, pos.x, pos.y + NODE_RADIUS + 8);
+        ctx.fillText(node.name, pos.x, pos.y + NODE_RADIUS + 10);
       });
     };
 
     // Animation loop
-    let stepCount = 0;
-    const animate = () => {
-      // Run multiple simulation steps per frame for stability
-      for (let i = 0; i < SIMULATION_STEPS; i++) {
-        simulationStep();
-      }
-      render();
-      stepCount++;
-
-      if (stepCount > 300) {
-        isSimulatingRef.current = false;
-      }
-
+    const animate = (time: number) => {
+      render(time);
       animationRef.current = requestAnimationFrame(animate);
     };
 
@@ -243,21 +277,56 @@ export function ForceGraph() {
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
 
-      let hovered: string | null = null;
+      if (draggedNodeId) {
+        const pos = positions.get(draggedNodeId)!;
+        pos.x = x;
+        pos.y = y;
+        // Apply small velocity for smooth damping after release
+        pos.vx = (x - pos.targetX) * DRAG_FORCE;
+        pos.vy = (y - pos.targetY) * DRAG_FORCE;
+      } else {
+        // Hover detection
+        let hovered: string | null = null;
+        filteredData.nodes.forEach((node) => {
+          const pos = positions.get(node.id)!;
+          const dx = x - pos.x;
+          const dy = y - pos.y;
+          if (Math.sqrt(dx * dx + dy * dy) < NODE_RADIUS + 12) {
+            hovered = node.id;
+          }
+        });
+
+        setHoveredNodeId(hovered);
+        canvas.style.cursor = hovered || draggedNodeId ? 'grab' : 'default';
+      }
+    };
+
+    // Mouse down - start dragging
+    const handleMouseDown = (e: MouseEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+
       filteredData.nodes.forEach((node) => {
         const pos = positions.get(node.id)!;
         const dx = x - pos.x;
         const dy = y - pos.y;
         if (Math.sqrt(dx * dx + dy * dy) < NODE_RADIUS + 10) {
-          hovered = node.id;
+          setDraggedNodeId(node.id);
+          canvas.style.cursor = 'grabbing';
+          pos.vx = 0;
+          pos.vy = 0;
         }
       });
-
-      setHoveredNodeId(hovered);
-      canvas.style.cursor = hovered ? 'pointer' : 'default';
     };
 
-    // Click handler
+    // Mouse up - stop dragging, let physics take over
+    const handleMouseUp = () => {
+      setDraggedNodeId(null);
+      canvas.style.cursor = 'default';
+    };
+
+    // Click handler - select node
     const handleClick = (e: MouseEvent) => {
       const rect = canvas.getBoundingClientRect();
       const x = e.clientX - rect.left;
@@ -274,19 +343,23 @@ export function ForceGraph() {
     };
 
     canvas.addEventListener('mousemove', handleMouseMove);
+    canvas.addEventListener('mousedown', handleMouseDown);
+    canvas.addEventListener('mouseup', handleMouseUp);
+    canvas.addEventListener('mouseleave', handleMouseUp);
     canvas.addEventListener('click', handleClick);
 
     return () => {
       window.removeEventListener('resize', updateSize);
       canvas.removeEventListener('mousemove', handleMouseMove);
-      canvas.removeEventListener('click', handleClick);
+      canvas.removeEventListener('mousedown', handleMouseDown);
+      canvas.removeEventListener('mouseup', handleMouseUp);
+      canvas.removeEventListener('mouseleave', handleMouseUp);
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
       }
     };
-  }, [filteredData, hoveredNodeId, selectedNode, selectNode]);
+  }, [filteredData, hoveredNodeId, draggedNodeId, selectedNode, selectNode]);
 
-  if (!filteredData || filteredData.nodes.length === 0) {
     return (
       <div className="w-full h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 to-slate-950">
         <div className="text-center">
@@ -307,8 +380,8 @@ export function ForceGraph() {
       {/* Info overlay */}
       <div className="absolute top-6 left-6 text-xs text-slate-300 bg-slate-800/80 px-4 py-3 rounded border border-slate-700 pointer-events-none backdrop-blur-sm">
         <p className="font-semibold text-cyan-400 mb-2">Project Universe</p>
-        <p>{filteredData.nodes.length} projects • {filteredData.links.length} connections</p>
-        <p className="text-slate-400 text-xs mt-2">Click to select • Scroll to filter</p>
+        <p className="text-xs mb-2">{filteredData.nodes.length} projects • {filteredData.links.length} connections</p>
+        <p className="text-slate-400 text-xs">Drag nodes • Click to select</p>
       </div>
     </div>
   );
