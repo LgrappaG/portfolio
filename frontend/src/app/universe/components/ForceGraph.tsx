@@ -35,6 +35,7 @@ export function ForceGraph() {
 
   const [hoveredNodeId, setHoveredNodeId] = useState<string | null>(null);
   const [draggedNodeId, setDraggedNodeId] = useState<string | null>(null);
+  const [zoom, setZoom] = useState(1);
   const nodePositionsRef = useRef<Map<string, NodePosition>>(new Map());
   const particlesRef = useRef<AnimatedParticle[]>([]);
   const animationTimeRef = useRef(0);
@@ -229,11 +230,12 @@ export function ForceGraph() {
       ctx.globalAlpha = 1;
       filteredData.nodes.forEach((node) => {
         const pos = positions.get(node.id)!;
+        const scaledRadius = NODE_RADIUS * zoom;
 
         // Node circle
         ctx.fillStyle = node.color;
         ctx.beginPath();
-        ctx.arc(pos.x, pos.y, NODE_RADIUS, 0, Math.PI * 2);
+        ctx.arc(pos.x, pos.y, scaledRadius, 0, Math.PI * 2);
         ctx.fill();
 
         // Glow on selected
@@ -241,7 +243,7 @@ export function ForceGraph() {
           ctx.strokeStyle = 'rgba(6, 182, 212, 0.8)';
           ctx.lineWidth = 3;
           ctx.beginPath();
-          ctx.arc(pos.x, pos.y, NODE_RADIUS + 8, 0, Math.PI * 2);
+          ctx.arc(pos.x, pos.y, scaledRadius + 8, 0, Math.PI * 2);
           ctx.stroke();
         }
 
@@ -250,16 +252,16 @@ export function ForceGraph() {
           ctx.strokeStyle = 'rgba(251, 191, 36, 0.6)';
           ctx.lineWidth = 2;
           ctx.beginPath();
-          ctx.arc(pos.x, pos.y, NODE_RADIUS + 5, 0, Math.PI * 2);
+          ctx.arc(pos.x, pos.y, scaledRadius + 5, 0, Math.PI * 2);
           ctx.stroke();
         }
 
         // Label below node
         ctx.fillStyle = '#e2e8f0';
-        ctx.font = 'bold 12px sans-serif';
+        ctx.font = `bold ${Math.max(10, 12 * zoom)}px sans-serif`;
         ctx.textAlign = 'center';
         ctx.textBaseline = 'top';
-        ctx.fillText(node.name, pos.x, pos.y + NODE_RADIUS + 10);
+        ctx.fillText(node.name, pos.x, pos.y + scaledRadius + 10);
       });
     };
 
@@ -291,7 +293,8 @@ export function ForceGraph() {
           const pos = positions.get(node.id)!;
           const dx = x - pos.x;
           const dy = y - pos.y;
-          if (Math.sqrt(dx * dx + dy * dy) < NODE_RADIUS + 12) {
+          const scaledRadius = NODE_RADIUS * zoom;
+          if (Math.sqrt(dx * dx + dy * dy) < scaledRadius + 12) {
             hovered = node.id;
           }
         });
@@ -311,7 +314,8 @@ export function ForceGraph() {
         const pos = positions.get(node.id)!;
         const dx = x - pos.x;
         const dy = y - pos.y;
-        if (Math.sqrt(dx * dx + dy * dy) < NODE_RADIUS + 10) {
+        const scaledRadius = NODE_RADIUS * zoom;
+        if (Math.sqrt(dx * dx + dy * dy) < scaledRadius + 10) {
           setDraggedNodeId(node.id);
           canvas.style.cursor = 'grabbing';
           pos.vx = 0;
@@ -336,7 +340,8 @@ export function ForceGraph() {
         const pos = positions.get(node.id)!;
         const dx = x - pos.x;
         const dy = y - pos.y;
-        if (Math.sqrt(dx * dx + dy * dy) < NODE_RADIUS + 10) {
+        const scaledRadius = NODE_RADIUS * zoom;
+        if (Math.sqrt(dx * dx + dy * dy) < scaledRadius + 10) {
           selectNode(selectedNode?.id === node.id ? null : node);
         }
       });
@@ -348,18 +353,33 @@ export function ForceGraph() {
     canvas.addEventListener('mouseleave', handleMouseUp);
     canvas.addEventListener('click', handleClick);
 
+    // Wheel zoom handler
+    const handleWheel = (e: WheelEvent) => {
+      e.preventDefault();
+      setZoom((prev) => {
+        const delta = e.deltaY > 0 ? 0.9 : 1.1;
+        const newZoom = Math.max(0.5, Math.min(3, prev * delta));
+        return newZoom;
+      });
+    };
+
+    canvas.addEventListener('wheel', handleWheel, { passive: false });
+
     return () => {
       window.removeEventListener('resize', updateSize);
       canvas.removeEventListener('mousemove', handleMouseMove);
       canvas.removeEventListener('mousedown', handleMouseDown);
       canvas.removeEventListener('mouseup', handleMouseUp);
       canvas.removeEventListener('mouseleave', handleMouseUp);
+      canvas.removeEventListener('click', handleClick);
+      canvas.removeEventListener('wheel', handleWheel);
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
       }
     };
-  }, [filteredData, hoveredNodeId, draggedNodeId, selectedNode, selectNode]);
+  }, [filteredData, hoveredNodeId, draggedNodeId, selectedNode, selectNode, zoom]);
 
+  if (!filteredData || filteredData.nodes.length === 0) {
     return (
       <div className="w-full h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 to-slate-950">
         <div className="text-center">
@@ -381,7 +401,8 @@ export function ForceGraph() {
       <div className="absolute top-6 left-6 text-xs text-slate-300 bg-slate-800/80 px-4 py-3 rounded border border-slate-700 pointer-events-none backdrop-blur-sm">
         <p className="font-semibold text-cyan-400 mb-2">Project Universe</p>
         <p className="text-xs mb-2">{filteredData.nodes.length} projects • {filteredData.links.length} connections</p>
-        <p className="text-slate-400 text-xs">Drag nodes • Click to select</p>
+        <p className="text-slate-400 text-xs">Drag nodes • Click to select • Scroll to zoom</p>
+        <p className="text-slate-500 text-xs mt-1">Zoom: {zoom.toFixed(1)}x</p>
       </div>
     </div>
   );
