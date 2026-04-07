@@ -40,6 +40,7 @@ export default function Header() {
     { label: 'Home', href: '/' },
     { label: 'About', href: '/about' },
     { label: 'Projects', href: '/projects' },
+    { label: 'Universe', href: '/universe' },
     { label: 'Contact', href: '/contact' }
   ];
 
