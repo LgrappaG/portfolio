@@ -5,7 +5,6 @@ import { useUniverseStore } from '@/lib/store/universeStore';
 import { UniverseGraph } from './components/UniverseGraph';
 import { UniversePanel } from './components/UniversePanel';
 import { UniverseControls } from './components/UniverseControls';
-import type { GraphNode } from '@/types/graph';
 
 export default function UniversePage() {
   const graphData = useUniverseStore((s) => s.graphData);
@@ -19,10 +18,6 @@ export default function UniversePage() {
   useEffect(() => {
     fetchGraphData();
   }, [fetchGraphData]);
-
-  const handleNodeClick = (node: GraphNode) => {
-    selectNode(node);
-  };
 
   const handleClosePanel = () => {
     selectNode(null);
@@ -54,7 +49,7 @@ export default function UniversePage() {
       {graphData && !isLoading && (
         <>
           <div className="flex-1 relative">
-            <UniverseGraph onNodeClick={handleNodeClick} />
+            <UniverseGraph />
             <UniverseControls />
           </div>
 
