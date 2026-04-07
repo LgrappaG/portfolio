@@ -4,9 +4,9 @@ import React, { useEffect, useRef, useMemo, useState } from 'react';
 import { useUniverseStore, selectFilteredGraphData } from '@/lib/store/universeStore';
 import { findConnectedNodes } from '@/lib/utils/graphBuilder';
 
-const NODE_RADIUS = 18; // Büyütüldü
-const DAMPING = 0.92; // Suyun içinde gibi yavaşlama
-const DRAG_FORCE = 0.4;
+const NODE_RADIUS = 18;
+const DAMPING = 0.92;
+const ELASTIC_ATTRACTION = 0.015; // Hafif lastik çekimi
 
 interface NodePosition {
   x: number;
@@ -105,22 +105,40 @@ export function ForceGraph() {
       ctx.fillStyle = '#0f172a';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // Update positions - nodes spring back to target
+      // Update positions - nodes move freely with elastic attraction to dragged node
       filteredData.nodes.forEach((node) => {
         const pos = positions.get(node.id)!;
 
-        // Spring force back to target
-        const dx = pos.targetX - pos.x;
-        const dy = pos.targetY - pos.y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
+        // Elastic attraction to dragged node if connected
+        if (draggedNodeId && draggedNodeId !== node.id) {
+          const draggedPos = positions.get(draggedNodeId);
+          if (draggedPos) {
+            // Check if connected
+            const isConnected = filteredData.links.some((link) => {
+              const source = String(link.source);
+              const target = String(link.target);
+              return (
+                (source === draggedNodeId && target === node.id) ||
+                (target === draggedNodeId && source === node.id)
+              );
+            });
 
-        if (distance > 0.1) {
-          const spring = 0.08;
-          pos.vx += dx * spring;
-          pos.vy += dy * spring;
+            if (isConnected) {
+              const dx = draggedPos.x - pos.x;
+              const dy = draggedPos.y - pos.y;
+              const distance = Math.sqrt(dx * dx + dy * dy);
+
+              if (distance > 30) {
+                // Only pull if far enough
+                const force = ELASTIC_ATTRACTION * distance * 0.5;
+                pos.vx += (dx / distance) * force;
+                pos.vy += (dy / distance) * force;
+              }
+            }
+          }
         }
 
-        // Damping (water resistance)
+        // Apply damping (friction/water resistance)
         pos.vx *= DAMPING;
         pos.vy *= DAMPING;
 
@@ -283,9 +301,9 @@ export function ForceGraph() {
         const pos = positions.get(draggedNodeId)!;
         pos.x = x;
         pos.y = y;
-        // Apply small velocity for smooth damping after release
-        pos.vx = (x - pos.targetX) * DRAG_FORCE;
-        pos.vy = (y - pos.targetY) * DRAG_FORCE;
+        // Clear velocity so it doesn't inherit old momentum
+        pos.vx = 0;
+        pos.vy = 0;
       } else {
         // Hover detection
         let hovered: string | null = null;
