@@ -7,7 +7,7 @@ import { findConnectedNodes } from '@/lib/utils/graphBuilder';
 import type { GraphNode } from '@/types/graph';
 
 const ForceGraph3D = dynamic(
-  () => import('react-force-graph').then((mod) => mod.ForceGraph3D),
+  () => import('react-force-graph').then((mod) => mod.ForceGraph2D),
   { ssr: false, loading: () => <div>Loading graph...</div> }
 );
 
@@ -167,15 +167,6 @@ export function UniverseGraph({ onNodeClick }: UniverseGraphProps) {
       if (selectedGraphNode && onNodeClick) {
         onNodeClick(selectedGraphNode);
       }
-
-      // Camera focus
-      const distance = 100;
-      const distRatio = 1 + (distance / Math.hypot(node.x, node.y));
-      fg.cameraPosition(
-        { x: node.x * distRatio, y: node.y * distRatio, z: node.z * distRatio },
-        node,
-        3000
-      );
     });
 
     // Node hover handler
@@ -224,7 +215,6 @@ export function UniverseGraph({ onNodeClick }: UniverseGraphProps) {
         nodeColor="color"
         nodeVal="val"
         nodeRelSize={4}
-        nodeOpacity={0.9}
         // @ts-ignore
         warmupTicks={40}
         cooldownTicks={200}
