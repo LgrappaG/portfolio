@@ -6,7 +6,8 @@ import { findConnectedNodes } from '@/lib/utils/graphBuilder';
 
 const NODE_RADIUS = 18;
 const DAMPING = 0.92;
-const ELASTIC_ATTRACTION = 0.015; // Hafif lastik çekimi
+const LINK_SPRING_FORCE = 0.008; // Çok zayıf - sürekli çalışacak
+const LINK_REST_DISTANCE = 120; // Nodes arası ideal uzaklık
 
 interface NodePosition {
   x: number;
@@ -105,40 +106,51 @@ export function ForceGraph() {
       ctx.fillStyle = '#0f172a';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // Update positions - nodes move freely with elastic attraction to dragged node
+      // Save context for zoom transformation
+      ctx.save();
+
+      // Apply zoom transformation - center on canvas
+      const centerX = canvas.width / 2;
+      const centerY = canvas.height / 2;
+      ctx.translate(centerX, centerY);
+      ctx.scale(zoom, zoom);
+      ctx.translate(-centerX, -centerY);
+
+      // Update positions with spring forces between connected nodes
       filteredData.nodes.forEach((node) => {
         const pos = positions.get(node.id)!;
 
-        // Elastic attraction to dragged node if connected
-        if (draggedNodeId && draggedNodeId !== node.id) {
-          const draggedPos = positions.get(draggedNodeId);
-          if (draggedPos) {
-            // Check if connected
-            const isConnected = filteredData.links.some((link) => {
-              const source = String(link.source);
-              const target = String(link.target);
-              return (
-                (source === draggedNodeId && target === node.id) ||
-                (target === draggedNodeId && source === node.id)
-              );
-            });
+        // Apply spring forces from all connected nodes (constant, not just during drag)
+        filteredData.links.forEach((link) => {
+          const source = String(link.source);
+          const target = String(link.target);
 
-            if (isConnected) {
-              const dx = draggedPos.x - pos.x;
-              const dy = draggedPos.y - pos.y;
+          let otherNodeId: string | null = null;
+          if (source === node.id) otherNodeId = target;
+          if (target === node.id) otherNodeId = source;
+
+          if (otherNodeId) {
+            const otherPos = positions.get(otherNodeId);
+            if (otherPos) {
+              const dx = otherPos.x - pos.x;
+              const dy = otherPos.y - pos.y;
               const distance = Math.sqrt(dx * dx + dy * dy);
 
-              if (distance > 30) {
-                // Only pull if far enough
-                const force = ELASTIC_ATTRACTION * distance * 0.5;
+              // Hooke's law: F = -k * (x - x0)
+              // x = current distance, x0 = rest distance
+              // If distance > rest, pull closer. If distance < rest, push away.
+              const displacement = distance - LINK_REST_DISTANCE;
+              const force = LINK_SPRING_FORCE * displacement;
+
+              if (distance > 0.1) {
                 pos.vx += (dx / distance) * force;
                 pos.vy += (dy / distance) * force;
               }
             }
           }
-        }
+        });
 
-        // Apply damping (friction/water resistance)
+        // Apply damping
         pos.vx *= DAMPING;
         pos.vy *= DAMPING;
 
@@ -248,12 +260,11 @@ export function ForceGraph() {
       ctx.globalAlpha = 1;
       filteredData.nodes.forEach((node) => {
         const pos = positions.get(node.id)!;
-        const scaledRadius = NODE_RADIUS * zoom;
 
-        // Node circle
+        // Node circle (no manual zoom scale, canvas is already zoomed)
         ctx.fillStyle = node.color;
         ctx.beginPath();
-        ctx.arc(pos.x, pos.y, scaledRadius, 0, Math.PI * 2);
+        ctx.arc(pos.x, pos.y, NODE_RADIUS, 0, Math.PI * 2);
         ctx.fill();
 
         // Glow on selected
@@ -261,7 +272,7 @@ export function ForceGraph() {
           ctx.strokeStyle = 'rgba(6, 182, 212, 0.8)';
           ctx.lineWidth = 3;
           ctx.beginPath();
-          ctx.arc(pos.x, pos.y, scaledRadius + 8, 0, Math.PI * 2);
+          ctx.arc(pos.x, pos.y, NODE_RADIUS + 8, 0, Math.PI * 2);
           ctx.stroke();
         }
 
@@ -270,17 +281,20 @@ export function ForceGraph() {
           ctx.strokeStyle = 'rgba(251, 191, 36, 0.6)';
           ctx.lineWidth = 2;
           ctx.beginPath();
-          ctx.arc(pos.x, pos.y, scaledRadius + 5, 0, Math.PI * 2);
+          ctx.arc(pos.x, pos.y, NODE_RADIUS + 5, 0, Math.PI * 2);
           ctx.stroke();
         }
 
         // Label below node
         ctx.fillStyle = '#e2e8f0';
-        ctx.font = `bold ${Math.max(10, 12 * zoom)}px sans-serif`;
+        ctx.font = `bold 12px sans-serif`;
         ctx.textAlign = 'center';
         ctx.textBaseline = 'top';
-        ctx.fillText(node.name, pos.x, pos.y + scaledRadius + 10);
+        ctx.fillText(node.name, pos.x, pos.y + NODE_RADIUS + 10);
       });
+
+      // Restore canvas context
+      ctx.restore();
     };
 
     // Animation loop
@@ -311,8 +325,7 @@ export function ForceGraph() {
           const pos = positions.get(node.id)!;
           const dx = x - pos.x;
           const dy = y - pos.y;
-          const scaledRadius = NODE_RADIUS * zoom;
-          if (Math.sqrt(dx * dx + dy * dy) < scaledRadius + 12) {
+          if (Math.sqrt(dx * dx + dy * dy) < NODE_RADIUS + 12) {
             hovered = node.id;
           }
         });
@@ -332,8 +345,7 @@ export function ForceGraph() {
         const pos = positions.get(node.id)!;
         const dx = x - pos.x;
         const dy = y - pos.y;
-        const scaledRadius = NODE_RADIUS * zoom;
-        if (Math.sqrt(dx * dx + dy * dy) < scaledRadius + 10) {
+        if (Math.sqrt(dx * dx + dy * dy) < NODE_RADIUS + 10) {
           setDraggedNodeId(node.id);
           canvas.style.cursor = 'grabbing';
           pos.vx = 0;
@@ -358,8 +370,7 @@ export function ForceGraph() {
         const pos = positions.get(node.id)!;
         const dx = x - pos.x;
         const dy = y - pos.y;
-        const scaledRadius = NODE_RADIUS * zoom;
-        if (Math.sqrt(dx * dx + dy * dy) < scaledRadius + 10) {
+        if (Math.sqrt(dx * dx + dy * dy) < NODE_RADIUS + 10) {
           selectNode(selectedNode?.id === node.id ? null : node);
         }
       });
