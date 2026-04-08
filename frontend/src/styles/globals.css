@@ -5,16 +5,19 @@
 @tailwind utilities;
 
 @layer base {
-  * {
-    @apply scroll-smooth;
+  html {
+    height: 100%;
+    overflow: hidden;
   }
 
-  html {
-    @apply scroll-smooth;
+  * {
+    scrollbar-gutter: stable;
   }
 
   body {
     @apply bg-slate-950 text-slate-900 dark:text-slate-50 transition-colors duration-300;
+    height: 100%;
+    overflow: hidden;
   }
 
   body::before {

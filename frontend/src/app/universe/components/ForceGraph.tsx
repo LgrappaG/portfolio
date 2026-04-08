@@ -88,6 +88,8 @@ export function ForceGraph() {
     const updateSize = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
+      canvas.style.width = '100%';
+      canvas.style.height = '100%';
     };
     updateSize();
     window.addEventListener('resize', updateSize);
@@ -312,18 +314,17 @@ export function ForceGraph() {
       let y = e.clientY - rect.top;
 
       // Transform mouse coords back through zoom transformation
-      // Canvas has: translate(centerX, centerY) -> scale(zoom) -> translate(-centerX, -centerY)
-      // So we need to reverse: add centerX/Y, divide by zoom, subtract centerX/Y
+      // Forward: x' = centerX + (x - centerX) * zoom
+      // Inverse: x = centerX + (x' - centerX) / zoom
       const centerX = canvas.width / 2;
       const centerY = canvas.height / 2;
-      x = (x - centerX) / zoom + centerX;
-      y = (y - centerY) / zoom + centerY;
+      x = centerX + (x - centerX) / zoom;
+      y = centerY + (y - centerY) / zoom;
 
       if (draggedNodeId) {
         const pos = positions.get(draggedNodeId)!;
         pos.x = x;
         pos.y = y;
-        // Clear velocity so it doesn't inherit old momentum
         pos.vx = 0;
         pos.vy = 0;
       } else {
@@ -352,8 +353,8 @@ export function ForceGraph() {
       // Transform mouse coords back through zoom transformation
       const centerX = canvas.width / 2;
       const centerY = canvas.height / 2;
-      x = (x - centerX) / zoom + centerX;
-      y = (y - centerY) / zoom + centerY;
+      x = centerX + (x - centerX) / zoom;
+      y = centerY + (y - centerY) / zoom;
 
       filteredData.nodes.forEach((node) => {
         const pos = positions.get(node.id)!;
@@ -383,8 +384,8 @@ export function ForceGraph() {
       // Transform mouse coords back through zoom transformation
       const centerX = canvas.width / 2;
       const centerY = canvas.height / 2;
-      x = (x - centerX) / zoom + centerX;
-      y = (y - centerY) / zoom + centerY;
+      x = centerX + (x - centerX) / zoom;
+      y = centerY + (y - centerY) / zoom;
 
       filteredData.nodes.forEach((node) => {
         const pos = positions.get(node.id)!;
