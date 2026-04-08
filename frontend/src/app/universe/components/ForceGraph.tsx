@@ -305,11 +305,19 @@ export function ForceGraph() {
 
     animationRef.current = requestAnimationFrame(animate);
 
-    // Mouse tracking
+    // Mouse tracking - handle zoom transformation
     const handleMouseMove = (e: MouseEvent) => {
       const rect = canvas.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
+      let x = e.clientX - rect.left;
+      let y = e.clientY - rect.top;
+
+      // Transform mouse coords back through zoom transformation
+      // Canvas has: translate(centerX, centerY) -> scale(zoom) -> translate(-centerX, -centerY)
+      // So we need to reverse: add centerX/Y, divide by zoom, subtract centerX/Y
+      const centerX = canvas.width / 2;
+      const centerY = canvas.height / 2;
+      x = (x - centerX) / zoom + centerX;
+      y = (y - centerY) / zoom + centerY;
 
       if (draggedNodeId) {
         const pos = positions.get(draggedNodeId)!;
@@ -338,8 +346,14 @@ export function ForceGraph() {
     // Mouse down - start dragging
     const handleMouseDown = (e: MouseEvent) => {
       const rect = canvas.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
+      let x = e.clientX - rect.left;
+      let y = e.clientY - rect.top;
+
+      // Transform mouse coords back through zoom transformation
+      const centerX = canvas.width / 2;
+      const centerY = canvas.height / 2;
+      x = (x - centerX) / zoom + centerX;
+      y = (y - centerY) / zoom + centerY;
 
       filteredData.nodes.forEach((node) => {
         const pos = positions.get(node.id)!;
@@ -363,8 +377,14 @@ export function ForceGraph() {
     // Click handler - select node
     const handleClick = (e: MouseEvent) => {
       const rect = canvas.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
+      let x = e.clientX - rect.left;
+      let y = e.clientY - rect.top;
+
+      // Transform mouse coords back through zoom transformation
+      const centerX = canvas.width / 2;
+      const centerY = canvas.height / 2;
+      x = (x - centerX) / zoom + centerX;
+      y = (y - centerY) / zoom + centerY;
 
       filteredData.nodes.forEach((node) => {
         const pos = positions.get(node.id)!;
