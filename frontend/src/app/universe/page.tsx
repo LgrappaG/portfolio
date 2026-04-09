@@ -19,6 +19,14 @@ export default function UniversePage() {
     fetchGraphData();
   }, [fetchGraphData]);
 
+  // Disable page scroll on Universe page
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, []);
+
   const handleClosePanel = () => {
     selectNode(null);
   };
