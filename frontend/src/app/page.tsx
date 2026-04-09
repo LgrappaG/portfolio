@@ -203,11 +203,11 @@ export default function Home() {
                     <div className="flex items-center justify-between text-sm text-slate-600 dark:text-slate-400 pl-4 pt-4 border-t border-slate-200 dark:border-slate-800">
                       <div className="flex gap-4">
                         <span className="flex items-center gap-1 font-semibold">
-                          <Star size={14} />
+                          <Star size={14} className="text-current" />
                           {featuredProject.stargazers_count}
                         </span>
                         <span className="flex items-center gap-1 font-semibold">
-                          <Eye size={14} />
+                          <Eye size={14} className="text-current" />
                           {featuredProject.watchers_count}
                         </span>
                       </div>
@@ -297,11 +297,11 @@ export default function Home() {
                     <div className="flex items-center justify-between text-sm text-slate-600 dark:text-slate-400 pl-4 pt-4 border-t border-slate-200 dark:border-slate-800">
                       <div className="flex gap-3">
                         <span className="flex items-center gap-1">
-                          <Star size={14} />
+                          <Star size={14} className="text-current" />
                           {project.stargazers_count}
                         </span>
                         <span className="flex items-center gap-1">
-                          <Eye size={14} />
+                          <Eye size={14} className="text-current" />
                           {project.watchers_count}
                         </span>
                       </div>
