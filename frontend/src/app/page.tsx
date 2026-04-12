@@ -27,18 +27,18 @@ export default function Home() {
         const userRes = await fetch('https://api.github.com/users/LgrappaG');
         const userData = await userRes.json();
 
-        const reposRes = await fetch('https://api.github.com/users/LgrappaG/repos?per_page=100&sort=stars');
+        const reposRes = await fetch('https://api.github.com/users/LgrappaG/repos?per_page=100&sort=updated');
         const reposData = await reposRes.json();
-
-        // Fetch featured project
-        const featuredRes = await fetch('https://api.github.com/repos/LgrappaG/Workflows-Agents');
-        const featuredData = await featuredRes.json();
 
         if (!userRes.ok || !reposRes.ok) {
           console.error('GitHub API error:', userRes.status, reposRes.status);
           throw new Error(`GitHub API error: ${userRes.status} ${reposRes.status}`);
         }
 
+        // Get all projects sorted by most recent update
+        const allProjectsSortedByRecent = reposData;
+
+        // Try to get a featured project (most recently updated, prioritize game dev)
         const gameProjects = reposData
           .filter((repo: GitHubRepo) => {
             const isGameDev =
@@ -47,8 +47,12 @@ export default function Home() {
               (repo.description && (repo.description.toLowerCase().includes('game') || repo.description.toLowerCase().includes('unity'))) ||
               repo.topics?.some((t: string) => ['game', 'unity', 'gamedev', 'game-development', 'c-sharp'].includes(t.toLowerCase()));
             return isGameDev;
-          })
-          .slice(0, 3);
+          });
+
+        const featuredRes = await fetch(
+          `https://api.github.com/repos/LgrappaG/${gameProjects.length > 0 ? gameProjects[0].name : allProjectsSortedByRecent[0].name}`
+        );
+        const featuredData = await featuredRes.json();
 
         let totalStars = 0;
         reposData.forEach((repo: GitHubRepo) => {
@@ -61,7 +65,8 @@ export default function Home() {
           followers: userData.followers || 0
         });
 
-        const projectsToShow = gameProjects.length > 0 ? gameProjects : reposData.slice(0, 3);
+        // Show most recently updated projects (first 3)
+        const projectsToShow = reposData.slice(0, 3);
         setProjects(projectsToShow);
 
         if (featuredRes.ok && featuredData.id) {
